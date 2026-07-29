@@ -1,191 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-  body { background-color: #0b0f19; color: #f3f4f6; font-family: sans-serif; padding: 20px; }
-  .hidden { display: none !important; }
-  canvas { background: #1e293b; border-radius: 8px; min-height: 300px; }
-</style>    
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>India's Economic Epochs & 35-Year Growth Story (1991–2026)</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace']
-                    },
-                    colors: {
-                        nda: '#f97316',
-                        upa: '#2563eb',
-                        indiaInc: '#10b981',
-                        govt: '#6366f1',
-                        darkBg: '#0f172a',
-                        cardBg: '#1e293b'
-                    }
-                }
-            }
-        }
-    </script>
     <style>
-        body { background-color: #0b0f19; color: #f3f4f6; font-family: 'Inter', sans-serif; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-        .tab-btn.active { background-color: #3b82f6; color: white; border-color: #60a5fa; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: #0b0f19; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; line-height: 1.5; }
+        header { border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 20px; }
+        h1 { font-size: 1.5rem; font-weight: 700; color: #ffffff; }
+        p.subtitle { font-size: 0.875rem; color: #94a3b8; margin-top: 4px; }
+        
+        .nav-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+        .tab-btn { background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .tab-btn:hover { background-color: #334155; color: #ffffff; }
+        .tab-btn.active { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; }
+
+        .param-bar { background-color: #131c2e; border: 1px solid #1e293b; padding: 12px; border-radius: 10px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; overflow-x: auto; }
+        .param-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; white-space: nowrap; }
+        .param-btn { background-color: #0f172a; color: #94a3b8; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; white-space: nowrap; }
+        .param-btn.active { background-color: #3b82f6; color: #ffffff; border-color: #60a5fa; }
+
+        .card { background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+        .card-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; }
+        .tag-blue { background-color: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .tag-green { background-color: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+
+        .chart-wrapper { position: relative; width: 100%; height: 380px; margin-top: 16px; }
+        .hidden { display: none !important; }
+        
+        .blurb-box { background-color: #1e293b; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 0 8px 8px 0; margin-top: 12px; }
+        footer { border-top: 1px solid #1e293b; padding-top: 16px; text-align: center; font-size: 0.75rem; color: #64748b; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between antialiased">
+<body>
 
-    <!-- HEADER -->
-    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="p-2 bg-blue-600/20 text-blue-400 rounded-lg border border-blue-500/30">
-                    <i data-lucide="line-chart" class="w-6 h-6"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-white tracking-tight">India Economic Epochs & 35-Year Growth Story</h1>
-                    <p class="text-xs text-slate-400">Comparing NDA 1, UPA 1, UPA 2, and NDA Till Now (1991–2026)</p>
-                </div>
-            </div>
-
-            <!-- VIEW SELECTOR TABS -->
-            <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-                <button onclick="switchTab('actuals')" id="tab-actuals" class="tab-btn active px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5">
-                    <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> 1. Actual Figures
-                </button>
-                <button onclick="switchTab('growth')" id="tab-growth" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
-                    <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> 2. Growth %
-                </button>
-                <button onclick="switchTab('blurbs')" id="tab-blurbs" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
-                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 3. Policy Blurbs
-                </button>
-                <button onclick="switchTab('regimes')" id="tab-regimes" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
-                    <i data-lucide="landmark" class="w-3.5 h-3.5"></i> Regimes Dashboard
-                </button>
-                <button onclick="switchTab('percapita')" id="tab-percapita" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
-                    <i data-lucide="users" class="w-3.5 h-3.5"></i> Per Capita Paradox
-                </button>
-            </div>
+    <!-- HEADER & TAB NAVIGATION -->
+    <header>
+        <h1>India Economic Epochs & 35-Year Growth Story</h1>
+        <p class="subtitle">Comparing NDA 1, UPA 1, UPA 2, and NDA Till Now (1991–2026)</p>
+        
+        <div class="nav-container">
+            <button onclick="switchTab('actuals')" id="tab-actuals" class="tab-btn active">1. Actual Figures</button>
+            <button onclick="switchTab('growth')" id="tab-growth" class="tab-btn">2. Growth %</button>
+            <button onclick="switchTab('blurbs')" id="tab-blurbs" class="tab-btn">3. Policy Blurbs</button>
+            <button onclick="switchTab('regimes')" id="tab-regimes" class="tab-btn">Regimes Dashboard</button>
+            <button onclick="switchTab('percapita')" id="tab-percapita" class="tab-btn">Per Capita Paradox</button>
         </div>
     </header>
 
     <!-- PARAMETER SELECTOR BAR -->
-    <div id="parameter-bar" class="bg-slate-900 border-b border-slate-800/80 py-2.5 px-4 sticky top-[61px] z-40">
-        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 overflow-x-auto custom-scrollbar">
-            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
-                <i data-lucide="sliders" class="w-3.5 h-3.5 text-blue-400"></i> Select Parameter:
-            </span>
-            <div class="flex items-center space-x-1 whitespace-nowrap text-xs" id="parameter-buttons-container">
-                <!-- Dynamically populated -->
-            </div>
+    <div class="param-bar">
+        <span class="param-label">Select Parameter:</span>
+        <div id="parameter-buttons-container" style="display: flex; gap: 8px;">
+            <!-- Dynamically populated -->
         </div>
     </div>
 
-    <!-- MAIN CONTENT CONTAINER -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
-
-        <!-- VIEW 1: ACTUAL FIGURES -->
-        <section id="view-actuals" class="space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="mb-6">
-                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-medium mb-2">
-                        <i data-lucide="layers" class="w-3.5 h-3.5"></i> Graph 1 • Baseline Absolute Value Trajectory
-                    </div>
-                    <h2 class="text-2xl font-bold text-white" id="actuals-title">Forex Reserves (USD Billion)</h2>
-                    <p class="text-sm text-slate-400" id="actuals-desc">Historical nominal absolute figures across 5-year block endings (1991–2026).</p>
-                </div>
-                <div class="relative w-full h-[400px]">
-                    <canvas id="chartActuals"></canvas>
-                </div>
+    <!-- VIEW 1: ACTUAL FIGURES -->
+    <section id="view-actuals">
+        <div class="card">
+            <span class="card-tag tag-blue">Graph 1 • Baseline Absolute Value Trajectory</span>
+            <h2 id="actuals-title" style="font-size: 1.3rem; color: white;">Forex Reserves (USD Billion)</h2>
+            <p id="actuals-desc" style="font-size: 0.875rem; color: #94a3b8;"></p>
+            <div class="chart-wrapper">
+                <canvas id="chartActuals"></canvas>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- VIEW 2: GROWTH PERCENTAGES -->
-        <section id="view-growth" class="hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <div class="mb-6">
-                    <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium mb-2">
-                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Graph 2 • Compounded / Period Percentage Expansion
-                    </div>
-                    <h2 class="text-2xl font-bold text-white" id="growth-title">Cumulative Period Growth (%)</h2>
-                    <p class="text-sm text-slate-400" id="growth-desc">Percentage expansion achieved within each block.</p>
-                </div>
-                <div class="relative w-full h-[400px]">
-                    <canvas id="chartGrowth"></canvas>
-                </div>
+    <!-- VIEW 2: GROWTH PERCENTAGES -->
+    <section id="view-growth" class="hidden">
+        <div class="card">
+            <span class="card-tag tag-green">Graph 2 • Compounded / Period Percentage Expansion</span>
+            <h2 id="growth-title" style="font-size: 1.3rem; color: white;">Cumulative Period Growth (%)</h2>
+            <p id="growth-desc" style="font-size: 0.875rem; color: #94a3b8;"></p>
+            <div class="chart-wrapper">
+                <canvas id="chartGrowth"></canvas>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- VIEW 3: POLICY BLURBS -->
-        <section id="view-blurbs" class="hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <h2 class="text-2xl font-bold text-white mb-2">Growth Percentages + Policy Drivers</h2>
-                <p class="text-sm text-slate-400 mb-6">Evaluating structural policy attribution across blocks.</p>
+    <!-- VIEW 3: POLICY BLURBS -->
+    <section id="view-blurbs" class="hidden">
+        <div class="card">
+            <h2 style="font-size: 1.3rem; color: white; margin-bottom: 8px;">Growth Percentages + Policy Drivers</h2>
+            <p style="font-size: 0.875rem; color: #94a3b8;">Evaluating structural policy attribution across blocks.</p>
+            
+            <div class="blurb-box">
+                <h4 style="color: #60a5fa; font-size: 0.95rem;">1991–1995: Structural Devaluation & Liberalization</h4>
+                <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">Abolishing Industrial License Raj, opening FDI routes, and Chelliah tax reforms provided the foundation for capital accumulation.</p>
             </div>
-        </section>
-
-        <!-- VIEW 4: REGIMES -->
-        <section id="view-regimes" class="hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h2 class="text-2xl font-bold text-white mb-2">Regime Comparison Framework</h2>
-                <p class="text-sm text-slate-400 mb-6">Comparative breakdown across political regimes.</p>
+            <div class="blurb-box">
+                <h4 style="color: #60a5fa; font-size: 0.95rem;">2004–2009: Global Supercycle Expansion</h4>
+                <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">High global demand and corporate balance sheet expansion drove peak GDP growth rates exceeding 8.5% annually.</p>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- VIEW 5: PER CAPITA PARADOX -->
-        <section id="view-percapita" class="hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
-                <h2 class="text-2xl font-bold text-white mb-2">The Per Capita GDP Paradox</h2>
-                <p class="text-sm text-slate-400 mb-4"><strong class="text-rose-400">Short Verdict:</strong> Mathematically expanding, structurally unequal.</p>
-            </div>
-        </section>
+    <!-- VIEW 4: REGIMES -->
+    <section id="view-regimes" class="hidden">
+        <div class="card">
+            <h2 style="font-size: 1.3rem; color: white; margin-bottom: 8px;">Regime Comparison Framework</h2>
+            <p style="font-size: 0.875rem; color: #94a3b8;">Breakdown of macroeconomic parameters across distinct political epochs.</p>
+        </div>
+    </section>
 
-    </main>
+    <!-- VIEW 5: PER CAPITA PARADOX -->
+    <section id="view-percapita" class="hidden">
+        <div class="card">
+            <h2 style="font-size: 1.3rem; color: white; margin-bottom: 8px;">The Per Capita GDP Paradox</h2>
+            <p style="font-size: 0.875rem; color: #f43f5e; font-weight: 600;">Short Verdict: Mathematically expanding, structurally unequal.</p>
+        </div>
+    </section>
 
     <!-- FOOTER -->
-    <footer class="border-t border-slate-800 bg-slate-950 py-6 px-4 sm:px-6 lg:px-8 mt-12 text-slate-500">
-        <div class="max-w-7xl mx-auto text-center text-xs">
-            India Growth & Regime Infographics • Interactive Analytical Framework
-        </div>
+    <footer>
+        India Growth & Regime Infographics • Interactive Analytical Framework
     </footer>
 
     <script>
-        // Data Registry for Parameters
         const economicData = {
             forex: {
                 title: "Forex Reserves (USD Billion)",
                 desc: "Total foreign exchange reserves held by RBI at block milestones.",
                 labels: ["1991", "1996", "2004", "2009", "2014", "2019", "2026"],
                 actuals: [5.8, 17.8, 113.0, 252.0, 311.0, 422.0, 680.0],
-                growth: [null, 206.9, 534.8, 123.0, 23.4, 35.7, 61.1]
+                growth: [0, 206.9, 534.8, 123.0, 23.4, 35.7, 61.1]
             },
             gdp: {
                 title: "Avg. Real GDP Growth (%)",
-                desc: "Compound annual growth rate during the respective blocks.",
+                desc: "Compound annual real GDP growth rate during the respective political blocks.",
                 labels: ["1991–96", "1996–04", "2004–09", "2009–14", "2014–19", "2019–26"],
                 actuals: [5.3, 5.9, 8.5, 6.7, 7.4, 6.2],
-                growth: [null, null, null, null, null, null]
+                growth: [5.3, 5.9, 8.5, 6.7, 7.4, 6.2]
             },
             sensex: {
                 title: "NIFTY / SENSEX Index Level",
-                desc: "Benchmark equity index levels at period markers.",
+                desc: "Benchmark equity index closing levels at milestone period markers.",
                 labels: ["1991", "1996", "2004", "2009", "2014", "2019", "2026"],
                 actuals: [1500, 3300, 5600, 9700, 22400, 39000, 77000],
-                growth: [null, 120.0, 69.6, 73.2, 130.9, 74.1, 97.4]
+                growth: [0, 120.0, 69.6, 73.2, 130.9, 74.1, 97.4]
             }
         };
 
@@ -194,11 +152,9 @@
         let chartGrowthInstance = null;
 
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
             buildParameterButtons();
             initCharts();
+            switchTab('actuals');
         });
 
         function buildParameterButtons() {
@@ -208,7 +164,7 @@
             Object.keys(economicData).forEach(key => {
                 const item = economicData[key];
                 const btn = document.createElement('button');
-                btn.className = `px-3 py-1.5 rounded-lg font-medium transition ${key === currentParam ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white bg-slate-950 border border-slate-800'}`;
+                btn.className = `param-btn ${key === currentParam ? 'active' : ''}`;
                 btn.textContent = item.title;
                 btn.onclick = () => {
                     currentParam = key;
@@ -255,9 +211,10 @@
                         label: 'Period Growth (%)',
                         data: data.growth,
                         borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
                         fill: true,
-                        tension: 0.3
+                        tension: 0.3,
+                        pointRadius: 5
                     }]
                 },
                 options: {
@@ -270,13 +227,21 @@
                     }
                 }
             });
+
+            updateChartText();
+        }
+
+        function updateChartText() {
+            const data = economicData[currentParam];
+            document.getElementById('actuals-title').textContent = data.title;
+            document.getElementById('actuals-desc').textContent = data.desc;
+            document.getElementById('growth-title').textContent = `${data.title} - Growth (%)`;
+            document.getElementById('growth-desc').textContent = data.desc;
         }
 
         function updateCharts() {
             const data = economicData[currentParam];
-            
-            document.getElementById('actuals-title').textContent = data.title;
-            document.getElementById('actuals-desc').textContent = data.desc;
+            updateChartText();
 
             chartActualsInstance.data.labels = data.labels;
             chartActualsInstance.data.datasets[0].label = data.title;
@@ -292,8 +257,8 @@
             ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(t => {
                 const el = document.getElementById('view-' + t);
                 const btn = document.getElementById('tab-' + t);
-                if(el) el.classList.toggle('hidden', t !== tabId);
-                if(btn) btn.classList.toggle('active', t === tabId);
+                if (el) el.classList.toggle('hidden', t !== tabId);
+                if (btn) btn.classList.toggle('active', t === tabId);
             });
         }
     </script>
