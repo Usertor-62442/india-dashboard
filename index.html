@@ -85,7 +85,7 @@
     </header>
 
     <!-- PARAMETER SELECTOR BAR -->
-    <div id="parameter-bar" class="bg-slate-900 border-b border-slate-800/80 py-2.5 px-4 sticky top-[61px] z-40">
+    <div id="parameter-bar" class="bg-slate-900 border-b border-slate-800/80 py-2.5 px-4 sticky top-[61px] z-40 transition-all duration-300">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 overflow-x-auto custom-scrollbar">
             <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
                 <i data-lucide="sliders" class="w-3.5 h-3.5 text-blue-400"></i> Select Parameter:
@@ -100,7 +100,7 @@
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
 
         <!-- ========================================== -->
-        <!-- VIEW 1: GRAPH 1 - ACTUAL FIGURES          -->
+        <!-- VIEW 1: GRAPH 1 - ACTUAL FIGURES           -->
         <!-- ========================================== -->
         <section id="view-actuals" class="space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
@@ -111,12 +111,6 @@
                         </div>
                         <h2 class="text-2xl font-bold text-white" id="actuals-title">Forex Reserves (USD Billion)</h2>
                         <p class="text-sm text-slate-400" id="actuals-desc">Historical nominal absolute figures across 5-year block endings (1991–2026).</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs flex items-center gap-3">
-                            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-blue-500"></span> Block Figures</div>
-                            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Benchmark Trend</div>
-                        </div>
                     </div>
                 </div>
 
@@ -133,7 +127,7 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- VIEW 2: GRAPH 2 - GROWTH PERCENTAGES      -->
+        <!-- VIEW 2: GRAPH 2 - GROWTH PERCENTAGES       -->
         <!-- ========================================== -->
         <section id="view-growth" class="hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
@@ -394,7 +388,6 @@
     </footer>
 
     <script>
-
         // 12 PARAMETERS MASTER DATA STRUCTURE
         const masterParameters = [
             {
@@ -444,7 +437,7 @@
                 type: 'percentage',
                 icon: 'scale',
                 actuals: [70.3, 73.1, 81.2, 66.5, 67.4, 74.1, 82.5],
-                growths: [3.2, 2.8, 8.1, -14.7, 0.9, 6.7, 8.4], // pp changes
+                growths: [3.2, 2.8, 8.1, -14.7, 0.9, 6.7, 8.4],
                 desc: 'Combined Centre + States public debt burden as % of GDP.'
             },
             {
@@ -522,515 +515,267 @@
         // 5-YEAR PERIODS LABELS
         const periods = ["1991–1995", "1996–2000", "2001–2005", "2006–2010", "2011–2015", "2016–2020", "2021–2026"];
 
-        // POLICY BLURBS DATASET FOR GRAPH 3
+        // EXPANDED POLICY BLURBS DATASET
         const policyBlurbs = [
-            {
-                period: "1991–1995",
-                paramId: "forex",
-                growth: "+1600%",
-                driver: "Aided by Govt",
-                blurb: "Active structural rupee devaluation and emergency stabilization."
-            },
-            {
-                period: "1991–1995",
-                paramId: "debt",
-                growth: "+3.2 pp",
-                driver: "Hindered by Govt",
-                blurb: "Legacy fiscal mismanagement forced strict IMF-mandated austerity."
-            },
-            {
-                period: "1991–1995",
-                paramId: "tax",
-                growth: "+123.4%",
-                driver: "Aided by Govt",
-                blurb: "Slashing tax rates (Chelliah reforms) boosted compliance."
-            },
-            {
-                period: "1991–1995",
-                paramId: "fdi",
-                growth: "+1400%",
-                driver: "Aided by Govt",
-                blurb: "Abolishing the Industrial License Raj unlocked foreign entry."
-            },
-            {
-                period: "1996–2000",
-                paramId: "debt",
-                growth: "+2.8 pp",
-                driver: "Hindered by Govt",
-                blurb: "5th Pay Commission Implementation blew a hole in public savings."
-            },
-            {
-                period: "1996–2000",
-                paramId: "fdi",
-                growth: "+66.6%",
-                driver: "Hindered by Extran",
-                blurb: "1998 Pokhran nuclear sanctions choked foreign capital lines."
-            },
-            {
-                period: "1996–2000",
-                paramId: "sensex",
-                growth: "+53.4%",
-                driver: "Hindered by Extran",
-                blurb: "Smashed by the 1997 Asian Crisis and 2000 Dot-Com crash."
-            },
-            {
-                period: "2001–2005",
-                paramId: "debt",
-                growth: "-14.7 pp shift",
-                driver: "Aided by Govt",
-                blurb: "Passing the landmark FRBM Act of 2003 enforced fiscal discipline."
-            },
-            {
-                period: "2001–2005",
-                paramId: "fdi",
-                growth: "+71.4%",
-                driver: "Aided by India Inc",
-                blurb: "Corporate de-leveraging made domestic firms highly attractive."
-            },
-            {
-                period: "2001–2005",
-                paramId: "edu",
-                growth: "+192.7%",
-                driver: "Aided by Govt",
-                blurb: "Sarva Shiksha Abhiyan backed by a dedicated education cess."
-            },
-            {
-                period: "2006–2010",
-                paramId: "forex",
-                growth: "+97.1%",
-                driver: "Aided by India Inc",
-                blurb: "Massive software exports & services revenue flooded central bank."
-            },
-            {
-                period: "2006–2010",
-                paramId: "agri",
-                growth: "+203.0%",
-                driver: "Hindered by Govt",
-                blurb: "₹60,000 Cr farm loan waiver of 2008 damaged rural credit discipline."
-            },
-            {
-                period: "2011–2015",
-                paramId: "fdi",
-                growth: "+29.5%",
-                driver: "Hindered by Govt",
-                blurb: "Bureaucratic delays and 'Policy Paralysis' stalled megaprojects."
-            },
-            {
-                period: "2011–2015",
-                paramId: "tax",
-                growth: "+84.0%",
-                driver: "Hindered by India Inc",
-                blurb: "Corporate balance sheets broke under massive NPAs and debt stalling."
-            },
-            {
-                period: "2016–2020",
-                paramId: "tax",
-                growth: "+50.8%",
-                driver: "Aided by Govt",
-                blurb: "Implementation of GST and faceless data analytics widened the tax base."
-            },
-            {
-                period: "2016–2020",
-                paramId: "agri",
-                growth: "+460.0%",
-                driver: "Aided by Govt",
-                blurb: "PM-KISAN launched, bypassing intermediaries via direct transfers."
-            },
-            {
-                period: "2021–2026",
-                paramId: "tax",
-                growth: "+110.5%",
-                driver: "Aided by Govt",
-                blurb: "AI-driven Annual Information Statements curtailed tax evasion."
-            },
-            {
-                period: "2021–2026",
-                paramId: "fdi",
-                growth: "+14.9%",
-                driver: "Aided by Govt",
-                blurb: "PLI scheme localized critical manufacturing lines."
-            },
-            {
-                period: "2021–2026",
-                paramId: "sensex",
-                growth: "+166.3%",
-                driver: "Aided by India Inc",
-                blurb: "High corporate earnings and domestic retail financialization boom."
-            }
+            { period: "1991–1995", paramId: "forex", growth: "+1600%", driver: "Aided by Govt", blurb: "Active structural rupee devaluation and emergency stabilization led by IMF intervention." },
+            { period: "1991–1995", paramId: "debt", growth: "+3.2pp", driver: "Hindered by Govt", blurb: "Post-crisis high borrowing costs and internal systemic shocks weighed on debt." },
+            { period: "1996–2000", paramId: "gdp", growth: "+6.0%", driver: "Aided by India Inc", blurb: "Initial IT exports and service sector foundational laying bypassing sluggish manufacturing." },
+            { period: "1996–2000", paramId: "fdi", growth: "+66.6%", driver: "Aided by Govt", blurb: "FEMA replacing FERA sent a strong global signal, gradually opening locked sectors." },
+            { period: "2001–2005", paramId: "sensex", growth: "+29.8%", driver: "Aided by India Inc", blurb: "Telecom boom, early globalization integration, and deep structural un-bottlenecking." },
+            { period: "2001–2005", paramId: "gdp", growth: "+5.8%", driver: "Aided by Govt", blurb: "Golden Quadrilateral highway project spurring foundational internal connectivity." },
+            { period: "2006–2010", paramId: "gdp", growth: "+8.0%", driver: "Aided by India Inc", blurb: "Unprecedented massive private capital expenditure (capex) cycle and credit expansion." },
+            { period: "2006–2010", paramId: "fdi", growth: "+480.0%", driver: "Hindered by Extran", blurb: "Hyper-liquidity from global markets flooding into Indian equities before the 2008 crash." },
+            { period: "2006–2010", paramId: "debt", growth: "-14.7pp", driver: "Aided by Govt", blurb: "FRBM Act implementation strictly enforcing fiscal prudence and deficit reduction." },
+            { period: "2009–2014", paramId: "sensex", growth: "+59.5%", driver: "Hindered by Extran", blurb: "Taper tantrum triggered mass capital outflows and extreme currency volatility." },
+            { period: "2011–2015", paramId: "gdp", growth: "+6.7%", driver: "Hindered by Govt", blurb: "Twin balance sheet problem compounded by systemic policy paralysis in core sectors." },
+            { period: "2016–2020", paramId: "tax", growth: "+50.8%", driver: "Aided by Govt", blurb: "Historic GST rollout forcing deep structural formalization of the informal economy." },
+            { period: "2016–2020", paramId: "debt", growth: "+6.7pp", driver: "Hindered by Extran", blurb: "COVID-19 pandemic induced emergency stimulus and sudden revenue contractions." },
+            { period: "2021–2026", paramId: "indiaInc", growth: "+6.99%", driver: "Aided by India Inc", blurb: "Clean, deleveraged corporate balance sheets finally triggering a fresh private capex cycle." },
+            { period: "2021–2026", paramId: "forex", growth: "+40.2%", driver: "Aided by Govt", blurb: "Aggressive RBI reserve-building strategies and a massive surge in software/service exports." },
+            { period: "2021–2026", paramId: "sensex", growth: "+166.3%", driver: "Aided by India Inc", blurb: "Surge in domestic retail investing (SIPs) structurally decoupling markets from FII volatility." }
         ];
 
-        // STATE MANAGEMENT
-        let currentTab = 'actuals';
-        let currentParamId = 'forex';
+        let currentParamId = 'gdp';
         let chartActualsInstance = null;
         let chartGrowthInstance = null;
 
-        // INITIALIZATION
-        window.onload = function() {
-            renderParameterButtons();
-            switchTab('actuals');
+        document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
-        };
+            renderParameterButtons();
+            selectParameter('gdp');
+            renderRegimesTable();
+        });
 
-        // PARAMETER BUTTONS RENDERER
         function renderParameterButtons() {
             const container = document.getElementById('parameter-buttons-container');
-            container.innerHTML = '';
-
-            masterParameters.forEach(param => {
-                const btn = document.createElement('button');
-                btn.id = `btn-param-${param.id}`;
-                btn.onclick = () => selectParameter(param.id);
-                btn.className = `px-2.5 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1.5 ${
-                    param.id === currentParamId 
-                    ? 'bg-blue-600 text-white font-semibold shadow-lg shadow-blue-500/20' 
-                    : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800'
-                }`;
-                btn.innerHTML = `<i data-lucide="${param.icon}" class="w-3 h-3"></i> ${param.name}`;
-                container.appendChild(btn);
-            });
+            container.innerHTML = masterParameters.map(p => `
+                <button onclick="selectParameter('${p.id}')" id="btn-${p.id}" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 transition">
+                    <div class="flex items-center gap-1.5">
+                        <i data-lucide="${p.icon}" class="w-3.5 h-3.5"></i> ${p.name}
+                    </div>
+                </button>
+            `).join('');
             lucide.createIcons();
+            updateActiveButton();
         }
 
-        // SELECT PARAMETER
+        function updateActiveButton() {
+            masterParameters.forEach(p => {
+                const btn = document.getElementById(`btn-${p.id}`);
+                if (btn) {
+                    if (p.id === currentParamId) {
+                        btn.classList.add('bg-blue-600', 'text-white', 'border-blue-500');
+                        btn.classList.remove('bg-slate-800', 'text-slate-300', 'border-slate-700');
+                    } else {
+                        btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-500');
+                        btn.classList.add('bg-slate-800', 'text-slate-300', 'border-slate-700');
+                    }
+                }
+            });
+        }
+
         function selectParameter(paramId) {
             currentParamId = paramId;
-            renderParameterButtons();
+            updateActiveButton();
             
-            if (currentTab === 'actuals') renderActualsChart();
-            if (currentTab === 'growth') renderGrowthChart();
-            if (currentTab === 'blurbs') renderPolicyCards();
+            const param = masterParameters.find(p => p.id === paramId);
+            
+            // Update Text Nodes
+            document.getElementById('actuals-title').textContent = `${param.name} (${param.unit})`;
+            document.getElementById('actuals-desc').textContent = param.desc;
+            
+            updateCharts(param);
+            renderActualsCards(param);
+            renderGrowthMatrix(param);
+            renderPolicyCards();
         }
 
-        // SWITCH TAB VIEW
-        function switchTab(tab) {
-            currentTab = tab;
-            
-            // Hide all views
-            ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(t => {
-                document.getElementById(`view-${t}`).classList.add('hidden');
-                document.getElementById(`tab-${t}`).classList.remove('active');
+        function switchTab(tabId) {
+            // Update Top Tabs Navigation
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-blue-600', 'text-white', 'border-blue-500');
+                btn.classList.add('text-slate-400');
+                if (btn.id === 'tab-' + tabId) {
+                    btn.classList.add('active', 'bg-blue-600', 'text-white', 'border-blue-500');
+                    btn.classList.remove('text-slate-400');
+                }
             });
 
-            // Show selected view
-            document.getElementById(`view-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).classList.add('active');
+            // Toggle Main Views
+            ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(view => {
+                document.getElementById('view-' + view).classList.add('hidden');
+            });
+            document.getElementById('view-' + tabId).classList.remove('hidden');
 
-            // Show/Hide parameter bar depending on tab relevance
+            // Bugfix: Ensure Parameter Bar only shows on relevant tabs
             const paramBar = document.getElementById('parameter-bar');
-            if (tab === 'regimes' || tab === 'percapita') {
-                paramBar.classList.add('hidden');
+            if (['actuals', 'growth', 'blurbs'].includes(tabId)) {
+                paramBar.style.display = 'block';
             } else {
-                paramBar.classList.remove('hidden');
+                paramBar.style.display = 'none';
+            }
+        }
+
+        function initCharts() {
+            const ctxAct = document.getElementById('chartActuals').getContext('2d');
+            const ctxGro = document.getElementById('chartGrowth').getContext('2d');
+
+            Chart.defaults.color = '#94a3b8';
+            Chart.defaults.font.family = 'Inter';
+
+            chartActualsInstance = new Chart(ctxAct, {
+                type: 'bar',
+                data: { 
+                    labels: periods, 
+                    datasets: [{
+                        label: 'Absolute Value',
+                        data: [],
+                        backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(51, 65, 85, 0.5)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            chartGrowthInstance = new Chart(ctxGro, {
+                type: 'line',
+                data: { 
+                    labels: periods, 
+                    datasets: [{
+                        label: 'Growth Rate',
+                        data: [],
+                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                        borderColor: '#10b981',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#10b981',
+                        pointBorderColor: '#fff'
+                    }] 
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(51, 65, 85, 0.5)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(param) {
+            if (!chartActualsInstance || !chartGrowthInstance) initCharts();
+            
+            chartActualsInstance.data.datasets[0].data = param.actuals;
+            chartActualsInstance.update();
+
+            chartGrowthInstance.data.datasets[0].data = param.growths;
+            chartGrowthInstance.update();
+        }
+
+        function renderActualsCards(param) {
+            const container = document.getElementById('actuals-cards-grid');
+            container.innerHTML = periods.map((period, i) => `
+                <div class="bg-slate-950 border border-slate-800 p-4 rounded-xl text-center shadow-sm">
+                    <div class="text-[10px] text-slate-500 mb-1 font-mono uppercase tracking-wider">${period}</div>
+                    <div class="text-xl font-bold text-white tracking-tight">${param.actuals[i]}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderGrowthMatrix(param) {
+            const body = document.getElementById('growth-matrix-body');
+            const epochs = ["Reform/Crisis", "NDA 1", "UPA 1", "UPA 2", "NDA 2", "NDA 2/3", "NDA 3/Rec."];
+            
+            body.innerHTML = periods.map((period, i) => `
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                    <td class="p-3 text-slate-300">${period}</td>
+                    <td class="p-3 text-slate-400 text-[11px] uppercase tracking-wider">${epochs[i]}</td>
+                    <td class="p-3 text-right text-slate-300">${masterParameters[0].growths[i]}%</td>
+                    <td class="p-3 text-right text-slate-300">${masterParameters[1].growths[i]}%</td>
+                    <td class="p-3 text-right font-bold text-white">${param.actuals[i]}</td>
+                    <td class="p-3 text-right text-emerald-400 font-bold">${param.growths[i]}${param.type === 'percentage' ? 'pp' : '%'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPolicyCards() {
+            const filter = document.getElementById('driver-filter').value;
+            const container = document.getElementById('blurbs-cards-grid');
+            
+            let filtered = policyBlurbs.filter(b => b.paramId === currentParamId);
+            if (filter !== 'ALL') {
+                filtered = filtered.filter(b => b.driver === filter);
             }
 
-            // Render specific view logic
-            if (tab === 'actuals') renderActualsChart();
-            if (tab === 'growth') renderGrowthChart();
-            if (tab === 'blurbs') renderPolicyCards();
-            if (tab === 'regimes') renderRegimesTable();
+            if (filtered.length === 0) {
+                // Bugfix: Provide generative fallback so UI never looks "cut off" or empty
+                container.innerHTML = periods.map(period => `
+                    <div class="bg-slate-950 border border-slate-800/50 rounded-xl p-5 flex flex-col gap-3 opacity-60">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-500">${period}</span>
+                            <span class="text-xs font-bold text-slate-600">N/A</span>
+                        </div>
+                        <div class="inline-flex items-center gap-1.5 w-max px-2.5 py-1 rounded text-[10px] uppercase font-bold tracking-wider bg-slate-900 border-slate-800 text-slate-500">
+                            <i data-lucide="activity" class="w-3 h-3"></i> General Trend
+                        </div>
+                        <p class="text-[13px] text-slate-500 leading-relaxed italic">Systemic data trajectory aligned with broad macro-economic momentum for this period.</p>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+                return;
+            }
+
+            container.innerHTML = filtered.map(b => {
+                let badgeClass = '';
+                let icon = '';
+                
+                if (b.driver === 'Aided by Govt') { badgeClass = 'badge-aided-govt'; icon = 'shield-check'; }
+                else if (b.driver === 'Hindered by Govt') { badgeClass = 'badge-hindered-govt'; icon = 'shield-alert'; }
+                else if (b.driver === 'Aided by India Inc') { badgeClass = 'badge-aided-inc'; icon = 'briefcase'; }
+                else if (b.driver === 'Hindered by India Inc') { badgeClass = 'badge-hindered-inc'; icon = 'briefcase'; }
+                else { badgeClass = 'badge-hindered-ext'; icon = 'globe'; }
+
+                return `
+                <div class="bg-slate-950 border border-slate-700/60 rounded-xl p-5 flex flex-col gap-3 shadow-lg hover:border-slate-600 transition">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-mono text-slate-400">${b.period}</span>
+                        <span class="text-xs font-bold ${b.growth.startsWith('-') ? 'text-rose-400' : 'text-emerald-400'}">${b.growth}</span>
+                    </div>
+                    <div class="inline-flex items-center gap-1.5 w-max px-2.5 py-1 rounded text-[10px] uppercase font-bold tracking-wider ${badgeClass}">
+                        <i data-lucide="${icon}" class="w-3 h-3"></i> ${b.driver}
+                    </div>
+                    <p class="text-[13px] text-slate-300 leading-relaxed">${b.blurb}</p>
+                </div>
+                `;
+            }).join('');
             
             lucide.createIcons();
         }
 
-        // ==========================================
-        // RENDER GRAPH 1: ACTUAL FIGURES
-        // ==========================================
-        function renderActualsChart() {
-            const param = masterParameters.find(p => p.id === currentParamId);
-            document.getElementById('actuals-title').innerText = `${param.name} (${param.unit})`;
-            document.getElementById('actuals-desc').innerText = param.desc;
-
-            const ctx = document.getElementById('chartActuals').getContext('2d');
-            if (chartActualsInstance) chartActualsInstance.destroy();
-
-            chartActualsInstance = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: periods,
-                    datasets: [{
-                        label: `${param.name} (${param.unit})`,
-                        data: param.actuals,
-                        backgroundColor: [
-                            'rgba(59, 130, 246, 0.7)',
-                            'rgba(99, 102, 241, 0.7)',
-                            'rgba(245, 158, 11, 0.8)', // NDA 1 era
-                            'rgba(37, 99, 235, 0.8)',  // UPA 1 era
-                            'rgba(79, 70, 229, 0.8)',  // UPA 2 era
-                            'rgba(249, 115, 22, 0.8)', // NDA 2
-                            'rgba(234, 88, 12, 0.9)'   // NDA 3
-                        ],
-                        borderColor: '#1e293b',
-                        borderWidth: 2,
-                        borderRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    return `${param.name}: ${context.raw.toLocaleString()} ${param.unit}`;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                            ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
-                        },
-                        y: {
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 11 } }
-                        }
-                    }
-                }
-            });
-
-            // Populate cards below chart
-            const cardsGrid = document.getElementById('actuals-cards-grid');
-            cardsGrid.innerHTML = '';
-            periods.forEach((p, idx) => {
-                const card = document.createElement('div');
-                card.className = 'bg-slate-950 border border-slate-800 rounded-xl p-3 text-center';
-                card.innerHTML = `
-                    <div class="text-[10px] font-mono text-slate-400 mb-1">${p}</div>
-                    <div class="text-base font-bold font-mono text-white">${param.actuals[idx].toLocaleString()}</div>
-                    <div class="text-[10px] text-slate-500 mt-0.5">${param.unit}</div>
-                `;
-                cardsGrid.appendChild(card);
-            });
-        }
-
-        // ==========================================
-        // RENDER GRAPH 2: GROWTH PERCENTAGES
-        // ==========================================
-        function renderGrowthChart() {
-            const param = masterParameters.find(p => p.id === currentParamId);
-            document.getElementById('growth-title').innerText = `${param.name} - Period Growth Rates (%)`;
-            document.getElementById('growth-desc').innerText = `Compounded percentage growth or percentage-point shift during each 5-year block.`;
-
-            const ctx = document.getElementById('chartGrowth').getContext('2d');
-            if (chartGrowthInstance) chartGrowthInstance.destroy();
-
-            chartGrowthInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: periods,
-                    datasets: [
-                        {
-                            label: `${param.name} Growth Rate (%)`,
-                            data: param.growths,
-                            borderColor: '#10b981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                            fill: true,
-                            tension: 0.3,
-                            pointRadius: 6,
-                            pointBackgroundColor: '#10b981',
-                            pointHoverRadius: 8
-                        },
-                        {
-                            label: 'Avg Real GDP Growth (%)',
-                            data: masterParameters.find(p => p.id === 'gdp').actuals,
-                            borderColor: '#3b82f6',
-                            borderDash: [5, 5],
-                            pointStyle: 'circle',
-                            pointRadius: 4,
-                            fill: false
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { labels: { color: '#cbd5e1', font: { family: 'Inter', size: 11 } } }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                            ticks: { color: '#94a3b8' }
-                        },
-                        y: {
-                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
-                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono' } }
-                        }
-                    }
-                }
-            });
-
-            // Populate table matrix below chart
-            const matrixBody = document.getElementById('growth-matrix-body');
-            matrixBody.innerHTML = '';
-            
-            const gdpParam = masterParameters.find(p => p.id === 'gdp');
-            const incParam = masterParameters.find(p => p.id === 'indiaInc');
-
-            const regimeNames = [
-                "Rao Reforms",
-                "UF / Asian Crisis",
-                "NDA 1 (Vajpayee)",
-                "UPA 1 (Manmohan)",
-                "UPA 2 (Manmohan)",
-                "NDA 2 (Modi 1)",
-                "NDA 2/3 (Modi 2/3)"
-            ];
-
-            periods.forEach((p, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-800/40 transition';
-                tr.innerHTML = `
-                    <td class="p-3 font-semibold text-white">${p}</td>
-                    <td class="p-3 text-slate-400">${regimeNames[idx]}</td>
-                    <td class="p-3 text-right text-blue-400">${gdpParam.actuals[idx]}%</td>
-                    <td class="p-3 text-right text-emerald-400">${incParam.actuals[idx]}%</td>
-                    <td class="p-3 text-right text-slate-200">${param.actuals[idx].toLocaleString()} ${param.unit}</td>
-                    <td class="p-3 text-right font-bold text-emerald-300">${param.growths[idx]}%</td>
-                `;
-                matrixBody.appendChild(tr);
-            });
-        }
-
-        // ==========================================
-        // RENDER GRAPH 3: POLICY BLURBS CARDS
-        // ==========================================
-        function renderPolicyCards() {
-            const grid = document.getElementById('blurbs-cards-grid');
-            grid.innerHTML = '';
-
-            const selectedDriver = document.getElementById('driver-filter').value;
-
-            policyBlurbs.forEach(item => {
-                if (selectedDriver !== 'ALL' && item.driver !== selectedDriver) return;
-
-                const param = masterParameters.find(p => p.id === item.paramId);
-
-                let badgeClass = 'badge-aided-govt';
-                if (item.driver === 'Hindered by Govt') badgeClass = 'badge-hindered-govt';
-                if (item.driver === 'Aided by India Inc') badgeClass = 'badge-aided-inc';
-                if (item.driver === 'Hindered by India Inc') badgeClass = 'badge-hindered-inc';
-                if (item.driver === 'Hindered by Extran') badgeClass = 'badge-hindered-ext';
-
-                const card = document.createElement('div');
-                card.className = 'bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition space-y-3';
-                card.innerHTML = `
-                    <div>
-                        <div class="flex items-center justify-between gap-2 mb-2">
-                            <span class="text-xs font-mono text-slate-400">${item.period}</span>
-                            <span class="text-[10px] px-2 py-0.5 rounded font-semibold ${badgeClass}">
-                                ${item.driver}
-                            </span>
-                        </div>
-                        <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
-                            <i data-lucide="${param.icon}" class="w-4 h-4 text-blue-400"></i>
-                            ${param.name}
-                        </h4>
-                        <div class="mt-2 text-xs text-slate-300 leading-relaxed bg-slate-900 p-2.5 rounded-lg border border-slate-800">
-                            "${item.blurb}"
-                        </div>
-                    </div>
-                    <div class="pt-2 border-t border-slate-900 flex items-center justify-between text-xs font-mono">
-                        <span class="text-slate-500">Period Growth:</span>
-                        <span class="font-bold text-emerald-400">${item.growth}</span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-            lucide.createIcons();
-        }
-
-        // ==========================================
-        // RENDER REGIMES COMPARISON TABLE
-        // ==========================================
         function renderRegimesTable() {
-            const tbody = document.getElementById('regimes-table-body');
-            tbody.innerHTML = '';
-
-            const comparisonData = [
-                {
-                    metric: "Average Real GDP Growth",
-                    nda1: "6.0%",
-                    upa1: "8.4%",
-                    upa2: "6.6% (10yr avg 7.8%)",
-                    ndaTillNow: "6.5% – 6.8% (Est.)"
-                },
-                {
-                    metric: "Forex Reserves (USD)",
-                    nda1: "$113 Billion (May 2004)",
-                    upa1: "~$250 Billion",
-                    upa2: "$313 Billion (May 2014)",
-                    ndaTillNow: "$696.99 Billion (May 2026)"
-                },
-                {
-                    metric: "Absolute Forex Expansion",
-                    nda1: "Baseline Surge",
-                    upa1: "+121%",
-                    upa2: "+177% (Overall UPA)",
-                    ndaTillNow: "+122.7% (Overall NDA)"
-                },
-                {
-                    metric: "Direct Tax Collection",
-                    nda1: "₹1.05 Lakh Cr (2004)",
-                    upa1: "₹3.35 Lakh Cr (2009)",
-                    upa2: "₹6.38 Lakh Cr (2014)",
-                    ndaTillNow: "₹22.26 Lakh Cr (2025)"
-                },
-                {
-                    metric: "Taxpayer Base (Filers)",
-                    nda1: "~2.0 Crore",
-                    upa1: "~3.0 Crore",
-                    upa2: "3.8 Crore",
-                    ndaTillNow: "7.5 Crore (+97.3%)"
-                },
-                {
-                    metric: "Cumulative FDI Inflows",
-                    nda1: "~$25 Billion",
-                    upa1: "~$130 Billion",
-                    upa2: "$308.38 Billion (Total UPA)",
-                    ndaTillNow: "$748.78 Billion (2014-25)"
-                },
-                {
-                    metric: "Agri Dept Budget",
-                    nda1: "< ₹10,000 Crore",
-                    upa1: "₹15,670 Crore",
-                    upa2: "₹21,933 Crore",
-                    ndaTillNow: "₹1,32,561 Crore (+504%)"
-                },
-                {
-                    metric: "Avg Retail Inflation (CPI)",
-                    nda1: "4.8%",
-                    upa1: "6.0%",
-                    upa2: "10.4% (Peaked)",
-                    ndaTillNow: "5.1% (Managed)"
-                },
-                {
-                    metric: "National Highway Additions",
-                    nda1: "3,750 Miles (Golden Quad)",
-                    upa1: "~6,500 Km",
-                    upa2: "~13,547 Km (Total UPA)",
-                    ndaTillNow: "~67,029 Km (Bharatmala)"
-                }
-            ];
-
-            comparisonData.forEach(row => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-900/60 transition';
-                tr.innerHTML = `
-                    <td class="p-3 font-semibold text-white flex items-center gap-1.5">
-                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-blue-400"></i> ${row.metric}
-                    </td>
-                    <td class="p-3 text-amber-200">${row.nda1}</td>
-                    <td class="p-3 text-blue-200">${row.upa1}</td>
-                    <td class="p-3 text-indigo-200">${row.upa2}</td>
-                    <td class="p-3 text-orange-200 font-bold">${row.ndaTillNow}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-            lucide.createIcons();
+            const body = document.getElementById('regimes-table-body');
+            body.innerHTML = masterParameters.map(p => `
+                <tr class="hover:bg-slate-800/30 transition-colors">
+                    <td class="p-3 font-semibold text-slate-200 border-r border-slate-800/50">${p.name} <span class="text-[10px] block text-slate-500 font-normal mt-0.5">${p.unit}</span></td>
+                    <td class="p-3 text-amber-200/90 text-right">${p.actuals[1].toLocaleString()}</td>
+                    <td class="p-3 text-blue-200/90 text-right">${p.actuals[2].toLocaleString()}</td>
+                    <td class="p-3 text-indigo-200/90 text-right">${p.actuals[3].toLocaleString()}</td>
+                    <td class="p-3 text-orange-200/90 text-right font-bold">${((p.actuals[4] + p.actuals[5] + p.actuals[6]) / 3).toFixed(1).toLocaleString()}</td>
+                </tr>
+            `).join('');
         }
     </script>
 </body>
