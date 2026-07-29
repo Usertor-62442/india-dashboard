@@ -3,264 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>India's Economic Epochs & 35-Year Growth Story (1991–2026)</title>
-    <!-- Chart.js -->
+    <title>India Economic Performance Dashboard (1991–2026)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: #0b0f19; color: #f3f4f6; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; padding: 20px; line-height: 1.5; }
-        header { border-bottom: 1px solid #1e293b; padding-bottom: 16px; margin-bottom: 20px; }
-        h1 { font-size: 1.5rem; font-weight: 700; color: #ffffff; }
-        p.subtitle { font-size: 0.875rem; color: #94a3b8; margin-top: 4px; }
-        
-        .nav-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-        .tab-btn { background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .tab-btn:hover { background-color: #334155; color: #ffffff; }
-        .tab-btn.active { background-color: #2563eb; color: #ffffff; border-color: #3b82f6; }
-
-        .param-bar { background-color: #131c2e; border: 1px solid #1e293b; padding: 12px; border-radius: 10px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; overflow-x: auto; }
-        .param-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #64748b; white-space: nowrap; }
-        .param-btn { background-color: #0f172a; color: #94a3b8; border: 1px solid #1e293b; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 500; cursor: pointer; white-space: nowrap; }
-        .param-btn.active { background-color: #3b82f6; color: #ffffff; border-color: #60a5fa; }
-
-        .card { background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-        .card-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; margin-bottom: 12px; }
-        .tag-blue { background-color: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-        .tag-green { background-color: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-
-        .chart-wrapper { position: relative; width: 100%; height: 380px; margin-top: 16px; }
-        .hidden { display: none !important; }
-        
-        .blurb-box { background-color: #1e293b; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 0 8px 8px 0; margin-top: 12px; }
-        footer { border-top: 1px solid #1e293b; padding-top: 16px; text-align: center; font-size: 0.75rem; color: #64748b; }
-    </style>
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 md:p-8">
+    <div class="max-w-7xl mx-auto space-y-6">
+        <!-- Header -->
+        <header class="border-b border-slate-800 pb-4">
+            <h1 class="text-2xl md:text-3xl font-bold text-white flex items-center gap-2">
+                <i data-lucide="line-chart" class="text-blue-500"></i>
+                India Economic Performance Dashboard (1991–2026)
+            </h1>
+            <p class="text-slate-400 text-sm mt-1">
+                Comparative analysis across 5-year macro policy periods.
+            </p>
+        </header>
 
-    <!-- HEADER & TAB NAVIGATION -->
-    <header>
-        <h1>India Economic Epochs & 35-Year Growth Story</h1>
-        <p class="subtitle">Comparing NDA 1, UPA 1, UPA 2, and NDA Till Now (1991–2026)</p>
-        
-        <div class="nav-container">
-            <button onclick="switchTab('actuals')" id="tab-actuals" class="tab-btn active">1. Actual Figures</button>
-            <button onclick="switchTab('growth')" id="tab-growth" class="tab-btn">2. Growth %</button>
-            <button onclick="switchTab('blurbs')" id="tab-blurbs" class="tab-btn">3. Policy Blurbs</button>
-            <button onclick="switchTab('regimes')" id="tab-regimes" class="tab-btn">Regimes Dashboard</button>
-            <button onclick="switchTab('percapita')" id="tab-percapita" class="tab-btn">Per Capita Paradox</button>
+        <!-- Parameter Selector -->
+        <div>
+            <h2 class="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-2">Select Macro Indicator</h2>
+            <div id="parameter-buttons-container" class="flex flex-wrap gap-2">
+                <!-- Dynamic parameter buttons injected here -->
+            </div>
         </div>
-    </header>
 
-    <!-- PARAMETER SELECTOR BAR -->
-    <div class="param-bar">
-        <span class="param-label">Select Parameter:</span>
-        <div id="parameter-buttons-container" style="display: flex; gap: 8px;">
-            <!-- Dynamically populated -->
+        <!-- Navigation Tabs -->
+        <div class="border-b border-slate-800 flex flex-wrap gap-2">
+            <button id="tab-actuals" onclick="switchTab('actuals')" class="active bg-blue-600 text-white px-4 py-2 rounded-t-lg font-medium text-sm transition">
+                Actual Levels
+            </button>
+            <button id="tab-growth" onclick="switchTab('growth')" class="text-slate-400 px-4 py-2 rounded-t-lg font-medium text-sm transition hover:bg-slate-800">
+                Period Growth (%)
+            </button>
+            <button id="tab-blurbs" onclick="switchTab('blurbs')" class="text-slate-400 px-4 py-2 rounded-t-lg font-medium text-sm transition hover:bg-slate-800">
+                Policy Context
+            </button>
+            <button id="tab-regimes" onclick="switchTab('regimes')" class="text-slate-400 px-4 py-2 rounded-t-lg font-medium text-sm transition hover:bg-slate-800">
+                Political Regimes
+            </button>
+            <button id="tab-percapita" onclick="switchTab('percapita')" class="text-slate-400 px-4 py-2 rounded-t-lg font-medium text-sm transition hover:bg-slate-800">
+                Per Capita Focus
+            </button>
         </div>
-    </div>
 
-    <!-- VIEW 1: ACTUAL FIGURES -->
-    <section id="view-actuals">
-        <div class="card">
-            <span class="card-tag tag-blue">Graph 1 • Baseline Absolute Value Trajectory</span>
-            <h2 id="actuals-title" style="font-size: 1.3rem; color: white;">Forex Reserves (USD Billion)</h2>
-            <p id="actuals-desc" style="font-size: 0.875rem; color: #94a3b8;"></p>
-            <div class="chart-wrapper">
+        <!-- View Sections -->
+        <!-- 1. Actuals View -->
+        <div id="view-actuals" class="bg-slate-800/40 p-6 rounded-xl border border-slate-800 space-y-4">
+            <div>
+                <h3 id="actuals-title" class="text-xl font-bold text-white"></h3>
+                <p id="actuals-desc" class="text-slate-400 text-sm mt-1"></p>
+            </div>
+            <div class="relative h-80 w-full">
                 <canvas id="chartActuals"></canvas>
             </div>
         </div>
-    </section>
 
-    <!-- VIEW 2: GROWTH PERCENTAGES -->
-    <section id="view-growth" class="hidden">
-        <div class="card">
-            <span class="card-tag tag-green">Graph 2 • Compounded / Period Percentage Expansion</span>
-            <h2 id="growth-title" style="font-size: 1.3rem; color: white;">Cumulative Period Growth (%)</h2>
-            <p id="growth-desc" style="font-size: 0.875rem; color: #94a3b8;"></p>
-            <div class="chart-wrapper">
+        <!-- 2. Growth View -->
+        <div id="view-growth" class="hidden bg-slate-800/40 p-6 rounded-xl border border-slate-800 space-y-4">
+            <div>
+                <h3 class="text-xl font-bold text-white">5-Year Growth Rate Comparison</h3>
+                <p class="text-slate-400 text-sm mt-1">Percentage growth or change for the selected parameter across 5-year blocks.</p>
+            </div>
+            <div class="relative h-80 w-full">
                 <canvas id="chartGrowth"></canvas>
             </div>
         </div>
-    </section>
 
-    <!-- VIEW 3: POLICY BLURBS -->
-    <section id="view-blurbs" class="hidden">
-        <div class="card">
-            <h2 style="font-size: 1.3rem; color: white; margin-bottom: 8px;">Growth Percentages + Policy Drivers</h2>
-            <p style="font-size: 0.875rem; color: #94a3b8;">Evaluating structural policy attribution across blocks.</p>
-            
-            <div class="blurb-box">
-                <h4 style="color: #60a5fa; font-size: 0.95rem;">1991–1995: Structural Devaluation & Liberalization</h4>
-                <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">Abolishing Industrial License Raj, opening FDI routes, and Chelliah tax reforms provided the foundation for capital accumulation.</p>
-            </div>
-            <div class="blurb-box">
-                <h4 style="color: #60a5fa; font-size: 0.95rem;">2004–2009: Global Supercycle Expansion</h4>
-                <p style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">High global demand and corporate balance sheet expansion drove peak GDP growth rates exceeding 8.5% annually.</p>
+        <!-- 3. Policy Blurbs View -->
+        <div id="view-blurbs" class="hidden bg-slate-800/40 p-6 rounded-xl border border-slate-800 space-y-4">
+            <h3 class="text-xl font-bold text-white mb-2">Policy Highlights & Key Drivers</h3>
+            <div id="blurbs-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Injected via JS -->
             </div>
         </div>
-    </section>
 
-    <!-- VIEW 4: REGIMES -->
-    <section id="view-regimes" class="hidden">
-        <div class="card">
-            <h2 style="font-size: 1.3rem; color: white; margin-bottom: 8px;">Regime Comparison Framework</h2>
-            <p style="font-size: 0.875rem; color: #94a3b8;">Breakdown of macroeconomic parameters across distinct political epochs.</p>
+        <!-- 4. Regimes View -->
+        <div id="view-regimes" class="hidden bg-slate-800/40 p-6 rounded-xl border border-slate-800 space-y-4">
+            <h3 class="text-xl font-bold text-white">Political & Policy Regimes (1991–2026)</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-800 text-slate-400 uppercase text-xs">
+                        <tr>
+                            <th class="p-3">Period</th>
+                            <th class="p-3">Government / Coalition</th>
+                            <th class="p-3">Key Economic Stance</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800">
+                        <tr><td class="p-3 font-semibold text-white">1991–1995</td><td class="p-3">PV Narasimha Rao (INC)</td><td class="p-3">LPG Reforms, Devaluation, Industrial Unlocking</td></tr>
+                        <tr><td class="p-3 font-semibold text-white">1996–2000</td><td class="p-3">United Front / NDA I (Vajpayee)</td><td class="p-3">Telecom Policy, Highways, Pokhran II sanctions management</td></tr>
+                        <tr><td class="p-3 font-semibold text-white">2001–2005</td><td class="p-3">NDA I / UPA I (Manmohan Singh)</td><td class="p-3">FRBM Act, Privatization momentum, Global Boom transition</td></tr>
+                        <tr><td class="p-3 font-semibold text-white">2006–2010</td><td class="p-3">UPA I & II</td><td class="p-3">MGNREGA, High Credit Growth, Global Financial Crisis stimulus</td></tr>
+                        <tr><td class="p-3 font-semibold text-white">2011–2015</td><td class="p-3">UPA II / NDA II (Modi)</td><td class="p-3">Policy paralysis transition, Inflation targeting, Jan Dhan/Aadhaar</td></tr>
+                        <tr><td class="p-3 font-semibold text-white">2016–2020</td><td class="p-3">NDA II & III</td><td class="p-3">Demonetization, GST Rollout, IBC, COVID-19 shock</td></tr>
+                        <tr><td class="p-3 font-semibold text-white">2021–2026</td><td class="p-3">NDA III & IV</td><td class="p-3">CapEx Push, PLI Schemes, Digital Public Infrastructure, Post-COVID recovery</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </section>
 
-    <!-- VIEW 5: PER CAPITA PARADOX -->
-    <section id="view-percapita" class="hidden">
-        <div class="card">
-            <h2 style="font-size: 1.3rem; color: white; margin-bottom: 8px;">The Per Capita GDP Paradox</h2>
-            <p style="font-size: 0.875rem; color: #f43f5e; font-weight: 600;">Short Verdict: Mathematically expanding, structurally unequal.</p>
+        <!-- 5. Per Capita View -->
+        <div id="view-percapita" class="hidden bg-slate-800/40 p-6 rounded-xl border border-slate-800 space-y-4">
+            <h3 class="text-xl font-bold text-white">Per Capita Economic Progress</h3>
+            <p class="text-slate-400 text-sm">Real income expansion and consumer purchasing capacity over 35 years.</p>
+            <div class="relative h-80 w-full">
+                <canvas id="chartPerCapita"></canvas>
+            </div>
         </div>
-    </section>
-
-    <!-- FOOTER -->
-    <footer>
-        India Growth & Regime Infographics • Interactive Analytical Framework
-    </footer>
+    </div>
 
     <script>
-        const economicData = {
-            forex: {
-                title: "Forex Reserves (USD Billion)",
-                desc: "Total foreign exchange reserves held by RBI at block milestones.",
-                labels: ["1991", "1996", "2004", "2009", "2014", "2019", "2026"],
-                actuals: [5.8, 17.8, 113.0, 252.0, 311.0, 422.0, 680.0],
-                growth: [0, 206.9, 534.8, 123.0, 23.4, 35.7, 61.1]
-            },
-            gdp: {
-                title: "Avg. Real GDP Growth (%)",
-                desc: "Compound annual real GDP growth rate during the respective political blocks.",
-                labels: ["1991–96", "1996–04", "2004–09", "2009–14", "2014–19", "2019–26"],
-                actuals: [5.3, 5.9, 8.5, 6.7, 7.4, 6.2],
-                growth: [5.3, 5.9, 8.5, 6.7, 7.4, 6.2]
-            },
-            sensex: {
-                title: "NIFTY / SENSEX Index Level",
-                desc: "Benchmark equity index closing levels at milestone period markers.",
-                labels: ["1991", "1996", "2004", "2009", "2014", "2019", "2026"],
-                actuals: [1500, 3300, 5600, 9700, 22400, 39000, 77000],
-                growth: [0, 120.0, 69.6, 73.2, 130.9, 74.1, 97.4]
-            }
-        };
+        // 12 PARAMETERS MASTER DATA STRUCTURE
+        const masterParameters = [
+            { id: 'gdp', name: 'Avg. Real GDP Growth', unit: '% Annual Average', type: 'percentage', icon: 'activity', actuals: [5.40, 6.00, 5.80, 8.00, 6.70, 5.50, 6.80], growths: [5.40, 6.00, 5.80, 8.00, 6.70, 5.50, 6.80], desc: 'Real GDP annual growth rate averaged over 5-year blocks.' },
+            { id: 'indiaInc', name: 'Avg. India Inc. Growth', unit: '% Private Sector GFCF', type: 'percentage', icon: 'building-2', actuals: [5.52, 5.78, 6.09, 7.94, 6.76, 5.33, 6.99], growths: [5.52, 5.78, 6.09, 7.94, 6.76, 5.33, 6.99], desc: 'Private sector capital formation and corporate output core growth.' },
+            { id: 'perCapita', name: 'Avg. Per Capita Growth', unit: '% Real Per Capita Income', type: 'percentage', icon: 'user-check', actuals: [3.40, 4.10, 4.20, 6.50, 5.30, 4.30, 5.80], growths: [3.40, 4.10, 4.20, 6.50, 5.30, 4.30, 5.80], desc: 'Average annual expansion in real per capita income.' },
+            { id: 'forex', name: 'Forex Reserves', unit: 'USD Billion', type: 'absolute', icon: 'globe', actuals: [20.8, 38.0, 141.5, 279.0, 341.6, 477.8, 670.1], growths: [1633.0, 82.6, 272.3, 97.1, 22.4, 39.8, 40.2], desc: 'Foreign exchange stockpiles held by the RBI at end of period.' },
+            { id: 'debt', name: 'Government Debt', unit: '% Combined GDP', type: 'percentage', icon: 'scale', actuals: [70.3, 73.1, 81.2, 66.5, 67.4, 74.1, 82.5], growths: [3.2, 2.8, 8.1, -14.7, 0.9, 6.7, 8.4], desc: 'Combined Centre + States public debt burden as % of GDP.' },
+            { id: 'tax', name: 'Direct Tax Collection', unit: 'INR Crores', type: 'absolute', icon: 'receipt', actuals: [15440, 31760, 132770, 378060, 695790, 1049700, 2210000], growths: [123.4, 105.7, 318.0, 184.7, 84.0, 50.8, 110.5], desc: 'Annual direct corporate and personal tax collection yields.' },
+            { id: 'fdi', name: 'FDI Inflow', unit: 'Annual USD Net ($B)', type: 'absolute', icon: 'arrow-down-right', actuals: [2.1, 3.5, 6.0, 34.8, 45.1, 74.4, 85.5], growths: [1400.0, 66.6, 71.4, 480.0, 29.5, 64.9, 14.9], desc: 'Net annual foreign direct investment capital inflow.' },
+            { id: 'sensex', name: 'NIFTY / SENSEX', unit: 'SENSEX Close Points', type: 'absolute', icon: 'trending-up', actuals: [3260, 5001, 6492, 17527, 27957, 29468, 78500], growths: [210.4, 53.4, 29.8, 169.9, 59.5, 5.4, 166.3], desc: 'Benchmark stock exchange index closing level.' },
+            { id: 'agri', name: 'Agricultural Budget', unit: 'INR Crores', type: 'absolute', icon: 'sprout', actuals: [2320, 3410, 5170, 15670, 23980, 134300, 127460], growths: [45.0, 46.9, 51.6, 203.0, 53.0, 460.0, -5.1], desc: 'Union budget allocation to agriculture & farmer welfare.' },
+            { id: 'edu', name: 'Educational Budget', unit: 'INR Crores', type: 'absolute', icon: 'graduation-cap', actuals: [1890, 3460, 10130, 43400, 68720, 94850, 125600], growths: [35.0, 83.0, 192.7, 328.4, 58.3, 38.0, 32.4], desc: 'Central Ministry allocations to education.' },
+            { id: 'health', name: 'Healthcare Budget', unit: 'INR Crores', type: 'absolute', icon: 'heart-pulse', actuals: [670, 1130, 2640, 19530, 30640, 62650, 89280], growths: [34.0, 68.6, 133.6, 639.7, 56.8, 104.4, 42.5], desc: 'Central Ministry allocations to healthcare.' },
+            { id: 'sol', name: 'Standard of Living', unit: 'PFCE Index (1991=100)', type: 'index', icon: 'shopping-bag', actuals: [121.4, 124.0, 161.0, 233.0, 301.0, 412.0, 585.0], growths: [21.4, 24.0, 29.8, 44.7, 29.1, 36.8, 41.9], desc: 'Private Final Consumption Expenditure real index.' }
+        ];
 
-        let currentParam = 'forex';
+        const periods = ["1991–1995", "1996–2000", "2001–2005", "2006–2010", "2011–2015", "2016–2020", "2021–2026"];
+
+        const policyBlurbs = [
+            { period: "1991–1995", paramId: "forex", growth: "+1633%", driver: "Aided by Govt Policy", blurb: "Abolished licensing, emergency Rupee devaluation, opened balance of payments." },
+            { period: "1991–1995", paramId: "debt", growth: "+3.2 pp", driver: "Hindered by Structural Deficits", blurb: "High fiscal deficit legacy forced structural tightening under IMF reforms." },
+            { period: "2001–2005", paramId: "forex", growth: "+272%", driver: "Aided by Fiscal discipline", blurb: "FRBM Act passed, aggressive foreign capital inflows, export surge." },
+            { period: "2006–2010", paramId: "gdp", growth: "8.00% avg", driver: "Aided by Global Expansion", blurb: "Global economic boom combined with high domestic credit expansion." },
+            { period: "2016–2020", paramId: "tax", growth: "+50.8%", driver: "Aided by Structural Reform", blurb: "GST implementation and tax base expansion via digital trail." },
+            { period: "2021–2026", paramId: "sensex", growth: "+166.3%", driver: "Aided by Domestic Retail Surge", blurb: "Massive inflow of retail SIPs and domestic institutional capital." }
+        ];
+
+        let currentParamId = 'gdp';
         let chartActualsInstance = null;
         let chartGrowthInstance = null;
+        let chartPerCapitaInstance = null;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            buildParameterButtons();
-            initCharts();
-            switchTab('actuals');
-        });
-
-        function buildParameterButtons() {
+        // Populate Parameter Buttons
+        function renderParameterButtons() {
             const container = document.getElementById('parameter-buttons-container');
             container.innerHTML = '';
             
-            Object.keys(economicData).forEach(key => {
-                const item = economicData[key];
+            masterParameters.forEach(param => {
                 const btn = document.createElement('button');
-                btn.className = `param-btn ${key === currentParam ? 'active' : ''}`;
-                btn.textContent = item.title;
-                btn.onclick = () => {
-                    currentParam = key;
-                    buildParameterButtons();
-                    updateCharts();
-                };
+                const isActive = param.id === currentParamId;
+                btn.className = `px-3 py-1.5 rounded-lg text-xs font-medium transition flex items-center gap-1.5 border ${
+                    isActive 
+                        ? 'bg-blue-600/20 text-blue-400 border-blue-500/50' 
+                        : 'bg-slate-800/50 text-slate-400 border-slate-700/50 hover:bg-slate-800 hover:text-slate-200'
+                }`;
+                btn.onclick = () => selectParameter(param.id);
+                btn.innerHTML = `<i data-lucide="${param.icon}" class="w-3.5 h-3.5"></i> ${param.name}`;
                 container.appendChild(btn);
             });
+            lucide.createIcons();
         }
 
-        function initCharts() {
+        // Handle Parameter Selection
+        function selectParameter(id) {
+            currentParamId = id;
+            renderParameterButtons();
+            updateCharts();
+            renderBlurbs();
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(id => {
+                const viewEl = document.getElementById(`view-${id}`);
+                const tabEl = document.getElementById(`tab-${id}`);
+                
+                if (id === tabId) {
+                    viewEl.classList.remove('hidden');
+                    tabEl.classList.add('active', 'bg-blue-600', 'text-white');
+                    tabEl.classList.remove('text-slate-400');
+                } else {
+                    viewEl.classList.add('hidden');
+                    tabEl.classList.remove('active', 'bg-blue-600', 'text-white');
+                    tabEl.classList.add('text-slate-400');
+                }
+            });
+
+            if (tabId === 'percapita' && !chartPerCapitaInstance) {
+                renderPerCapitaChart();
+            }
+        }
+
+        // Update Main Charts Data
+        function updateCharts() {
+            const param = masterParameters.find(p => p.id === currentParamId);
+            if (!param) return;
+
+            // Update Header Information
+            document.getElementById('actuals-title').innerText = `${param.name} (${param.unit})`;
+            document.getElementById('actuals-desc').innerText = param.desc;
+            
+            // Destroy existing instances if present
+            if(chartActualsInstance) chartActualsInstance.destroy();
+            if(chartGrowthInstance) chartGrowthInstance.destroy();
+
+            // Render Actuals Chart
             const ctxActuals = document.getElementById('chartActuals').getContext('2d');
-            const ctxGrowth = document.getElementById('chartGrowth').getContext('2d');
-
-            const data = economicData[currentParam];
-
             chartActualsInstance = new Chart(ctxActuals, {
+                type: 'line',
+                data: {
+                    labels: periods,
+                    datasets: [{
+                        label: `${param.name} (${param.unit})`,
+                        data: param.actuals,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#60a5fa',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.35
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
+                    scales: {
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } }
+                    }
+                }
+            });
+
+            // Render Growth Chart
+            const ctxGrowth = document.getElementById('chartGrowth').getContext('2d');
+            chartGrowthInstance = new Chart(ctxGrowth, {
                 type: 'bar',
                 data: {
-                    labels: data.labels,
+                    labels: periods,
                     datasets: [{
-                        label: data.title,
-                        data: data.actuals,
-                        backgroundColor: '#3b82f6',
+                        label: 'Period Change / Growth (%)',
+                        data: param.growths,
+                        backgroundColor: param.growths.map(v => v >= 0 ? 'rgba(16, 185, 129, 0.8)' : 'rgba(239, 68, 68, 0.8)'),
                         borderRadius: 6
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
                     scales: {
-                        x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } }
                     }
                 }
             });
+        }
 
-            chartGrowthInstance = new Chart(ctxGrowth, {
+        // Render Policy Blurbs
+        function renderBlurbs() {
+            const container = document.getElementById('blurbs-container');
+            container.innerHTML = '';
+
+            const filtered = policyBlurbs.filter(b => b.paramId === currentParamId);
+            const itemsToDisplay = filtered.length > 0 ? filtered : policyBlurbs;
+
+            itemsToDisplay.forEach(item => {
+                const param = masterParameters.find(p => p.id === item.paramId);
+                const card = document.createElement('div');
+                card.className = 'bg-slate-900/60 p-4 rounded-lg border border-slate-700/60 flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-900/50 text-blue-300 border border-blue-700/40">${item.period}</span>
+                            <span class="text-xs font-semibold ${item.driver.includes('Aided') ? 'text-emerald-400' : 'text-amber-400'}">${item.growth}</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white mb-1">${param ? param.name : item.paramId}</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">${item.blurb}</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-slate-800 text-[10px] text-slate-500 font-medium">
+                        Driver: ${item.driver}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render Per Capita Chart
+        function renderPerCapitaChart() {
+            const perCapitaData = masterParameters.find(p => p.id === 'perCapita');
+            const solData = masterParameters.find(p => p.id === 'sol');
+            if (!perCapitaData || !solData) return;
+
+            const ctx = document.getElementById('chartPerCapita').getContext('2d');
+            chartPerCapitaInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: data.labels,
-                    datasets: [{
-                        label: 'Period Growth (%)',
-                        data: data.growth,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: 5
-                    }]
+                    labels: periods,
+                    datasets: [
+                        {
+                            label: 'Avg Per Capita Growth (%)',
+                            data: perCapitaData.actuals,
+                            borderColor: '#8b5cf6',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: 'Standard of Living Index (PFCE)',
+                            data: solData.actuals,
+                            borderColor: '#f59e0b',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }
+                    ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
+                    plugins: { legend: { labels: { color: '#94a3b8' } } },
                     scales: {
-                        x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } },
-                        y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8' } }
+                        x: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } },
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(51, 65, 85, 0.4)' } }
                     }
                 }
             });
-
-            updateChartText();
         }
 
-        function updateChartText() {
-            const data = economicData[currentParam];
-            document.getElementById('actuals-title').textContent = data.title;
-            document.getElementById('actuals-desc').textContent = data.desc;
-            document.getElementById('growth-title').textContent = `${data.title} - Growth (%)`;
-            document.getElementById('growth-desc').textContent = data.desc;
-        }
-
-        function updateCharts() {
-            const data = economicData[currentParam];
-            updateChartText();
-
-            chartActualsInstance.data.labels = data.labels;
-            chartActualsInstance.data.datasets[0].label = data.title;
-            chartActualsInstance.data.datasets[0].data = data.actuals;
-            chartActualsInstance.update();
-
-            chartGrowthInstance.data.labels = data.labels;
-            chartGrowthInstance.data.datasets[0].data = data.growth;
-            chartGrowthInstance.update();
-        }
-
-        function switchTab(tabId) {
-            ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(t => {
-                const el = document.getElementById('view-' + t);
-                const btn = document.getElementById('tab-' + t);
-                if (el) el.classList.toggle('hidden', t !== tabId);
-                if (btn) btn.classList.toggle('active', t === tabId);
-            });
-        }
+        // On Page Load
+        window.onload = () => {
+            renderParameterButtons();
+            updateCharts();
+            renderBlurbs();
+        };
     </script>
 </body>
 </html>
