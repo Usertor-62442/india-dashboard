@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>India's Economic Epochs & 35-Year Growth Story (1991–2026)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace']
+                    },
+                    colors: {
+                        nda: '#f97316',
+                        upa: '#2563eb',
+                        indiaInc: '#10b981',
+                        govt: '#6366f1',
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0b0f19; color: #f3f4f6; font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
+        .tab-btn.active { background-color: #3b82f6; color: white; border-color: #60a5fa; }
+        .badge-aided-govt { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+        .badge-hindered-govt { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge-aided-inc { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+        .badge-hindered-inc { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge-hindered-ext { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- HEADER -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-blue-600/20 text-blue-400 rounded-lg border border-blue-500/30">
+                    <i data-lucide="line-chart" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-white tracking-tight">India Economic Epochs & 35-Year Growth Story</h1>
+                    <p class="text-xs text-slate-400">Comparing NDA 1, UPA 1, UPA 2, and NDA Till Now (1991–2026)</p>
+                </div>
+            </div>
+
+            <!-- VIEW SELECTOR TABS -->
+            <div class="flex flex-wrap items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+                <button onclick="switchTab('actuals')" id="tab-actuals" class="tab-btn active px-3 py-1.5 rounded-lg font-medium transition flex items-center gap-1.5">
+                    <i data-lucide="bar-chart-2" class="w-3.5 h-3.5"></i> 1. Actual Figures
+                </button>
+                <button onclick="switchTab('growth')" id="tab-growth" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> 2. Growth %
+                </button>
+                <button onclick="switchTab('blurbs')" id="tab-blurbs" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="file-text" class="w-3.5 h-3.5"></i> 3. Policy Blurbs
+                </button>
+                <button onclick="switchTab('regimes')" id="tab-regimes" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="landmark" class="w-3.5 h-3.5"></i> Regimes Dashboard
+                </button>
+                <button onclick="switchTab('percapita')" id="tab-percapita" class="tab-btn px-3 py-1.5 rounded-lg font-medium text-slate-400 hover:text-white transition flex items-center gap-1.5">
+                    <i data-lucide="users" class="w-3.5 h-3.5"></i> Per Capita Paradox
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- PARAMETER SELECTOR BAR -->
+    <div id="parameter-bar" class="bg-slate-900 border-b border-slate-800/80 py-2.5 px-4 sticky top-[61px] z-40">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4 overflow-x-auto custom-scrollbar">
+            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1 whitespace-nowrap">
+                <i data-lucide="sliders" class="w-3.5 h-3.5 text-blue-400"></i> Select Parameter:
+            </span>
+            <div class="flex items-center space-x-1 whitespace-nowrap text-xs" id="parameter-buttons-container">
+                <!-- Dynamically populated via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: GRAPH 1 - ACTUAL FIGURES          -->
+        <!-- ========================================== -->
+        <section id="view-actuals" class="space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-medium mb-2">
+                            <i data-lucide="layers" class="w-3.5 h-3.5"></i> Graph 1 • Baseline Absolute Value Trajectory
+                        </div>
+                        <h2 class="text-2xl font-bold text-white" id="actuals-title">Forex Reserves (USD Billion)</h2>
+                        <p class="text-sm text-slate-400" id="actuals-desc">Historical nominal absolute figures across 5-year block endings (1991–2026).</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs flex items-center gap-3">
+                            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-blue-500"></span> Block Figures</div>
+                            <div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Benchmark Trend</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHART CANVAS -->
+                <div class="relative w-full h-[400px]">
+                    <canvas id="chartActuals"></canvas>
+                </div>
+            </div>
+
+            <!-- PERIOD BY PERIOD DATA CARDS -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3" id="actuals-cards-grid">
+                <!-- Dynamically populated cards -->
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: GRAPH 2 - GROWTH PERCENTAGES      -->
+        <!-- ========================================== -->
+        <section id="view-growth" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-medium mb-2">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Graph 2 • Compounded / Period Percentage Expansion
+                        </div>
+                        <h2 class="text-2xl font-bold text-white" id="growth-title">Cumulative Period Growth (%)</h2>
+                        <p class="text-sm text-slate-400" id="growth-desc">Percentage expansion achieved within each 5-year block.</p>
+                    </div>
+                </div>
+
+                <!-- CHART CANVAS -->
+                <div class="relative w-full h-[400px]">
+                    <canvas id="chartGrowth"></canvas>
+                </div>
+            </div>
+
+            <!-- GROWTH STATS MATRIX -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <h3 class="text-base font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="table" class="w-4 h-4 text-emerald-400"></i> Comparative Growth Rates Across 5-Year Blocks
+                </h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 uppercase font-mono">
+                            <tr>
+                                <th class="p-3 rounded-l-lg">5-Year Block</th>
+                                <th class="p-3">Political Epoch</th>
+                                <th class="p-3 text-right">Avg GDP Growth</th>
+                                <th class="p-3 text-right">India Inc Growth</th>
+                                <th class="p-3 text-right">Selected Param Value</th>
+                                <th class="p-3 text-right rounded-r-lg">Param Growth Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="growth-matrix-body" class="divide-y divide-slate-800/60 font-mono">
+                            <!-- Dynamically populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: GRAPH 3 - POLICY BLURBS MATRIX    -->
+        <!-- ========================================== -->
+        <section id="view-blurbs" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-purple-500/10 text-purple-400 border border-purple-500/20 text-xs font-medium mb-2">
+                            <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Graph 3 • Policy Attribution & Driver Matrix
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Growth Percentages + Policy Drivers</h2>
+                        <p class="text-sm text-slate-400">Evaluating if parameter growth was aided or hindered by government policy, private corporate momentum, or external shocks.</p>
+                    </div>
+
+                    <!-- DRIVER FILTER -->
+                    <div class="flex items-center gap-2 text-xs">
+                        <span class="text-slate-400">Filter Driver:</span>
+                        <select id="driver-filter" onchange="renderPolicyCards()" class="bg-slate-950 border border-slate-800 text-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:border-blue-500">
+                            <option value="ALL">All Drivers</option>
+                            <option value="Aided by Govt">Aided by Govt</option>
+                            <option value="Hindered by Govt">Hindered by Govt</option>
+                            <option value="Aided by India Inc">Aided by India Inc</option>
+                            <option value="Hindered by India Inc">Hindered by India Inc</option>
+                            <option value="Hindered by Extran">External Shock / Friction</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- CARDS GRID FOR BLURBS -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="blurbs-cards-grid">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: POLITICAL REGIMES DASHBOARD       -->
+        <!-- ========================================== -->
+        <section id="view-regimes" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <div class="mb-6">
+                    <span class="px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400 border border-amber-500/20 text-xs font-medium">
+                        Regime Comparison Framework
+                    </span>
+                    <h2 class="text-2xl font-bold text-white mt-2">NDA 1 vs UPA 1 vs UPA 2 vs NDA Till Now</h2>
+                    <p class="text-sm text-slate-400">Side-by-side comparative analysis of key performance metrics across Indian governance epochs.</p>
+                </div>
+
+                <!-- REGIME HEADERS GRID -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <!-- NDA 1 -->
+                    <div class="bg-slate-950 border-t-4 border-t-amber-500 border-x border-b border-slate-800 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-amber-400 uppercase tracking-wide">NDA 1</span>
+                            <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20">1998–2004</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Atal Bihari Vajpayee</h3>
+                        <p class="text-xs text-slate-400 mt-1">Focus: Highway Connectivity, Revenue Sharing Telecom, FRBM Prudence.</p>
+                    </div>
+
+                    <!-- UPA 1 -->
+                    <div class="bg-slate-950 border-t-4 border-t-blue-500 border-x border-b border-slate-800 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-blue-400 uppercase tracking-wide">UPA 1</span>
+                            <span class="text-[10px] bg-blue-500/10 text-blue-300 px-2 py-0.5 rounded border border-blue-500/20">2004–2009</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Dr. Manmohan Singh</h3>
+                        <p class="text-xs text-slate-400 mt-1">Focus: High GDP Expansion, Rights-based Welfarism, Global Capital Boom.</p>
+                    </div>
+
+                    <!-- UPA 2 -->
+                    <div class="bg-slate-950 border-t-4 border-t-indigo-500 border-x border-b border-slate-800 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-indigo-400 uppercase tracking-wide">UPA 2</span>
+                            <span class="text-[10px] bg-indigo-500/10 text-indigo-300 px-2 py-0.5 rounded border border-indigo-500/20">2009–2014</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Dr. Manmohan Singh</h3>
+                        <p class="text-xs text-slate-400 mt-1">Focus: Twin Balance Sheet Crisis, High Inflation, Bureaucratic Gridlock.</p>
+                    </div>
+
+                    <!-- NDA TILL NOW -->
+                    <div class="bg-slate-950 border-t-4 border-t-orange-500 border-x border-b border-slate-800 rounded-xl p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-orange-400 uppercase tracking-wide">NDA 2 & 3 (Till Now)</span>
+                            <span class="text-[10px] bg-orange-500/10 text-orange-300 px-2 py-0.5 rounded border border-orange-500/20">2014–2026</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white">Narendra Modi</h3>
+                        <p class="text-xs text-slate-400 mt-1">Focus: Public Infrastructure CapEx, Digitized JAM Welfare, GST & IBC.</p>
+                    </div>
+                </div>
+
+                <!-- DETAILED COMPARISON TABLE -->
+                <div class="overflow-x-auto rounded-xl border border-slate-800">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-slate-950 text-slate-400 uppercase font-mono border-b border-slate-800">
+                            <tr>
+                                <th class="p-3 w-1/5">Key Macro Parameter</th>
+                                <th class="p-3 w-1/5 text-amber-300">NDA 1 (1998-2004)</th>
+                                <th class="p-3 w-1/5 text-blue-300">UPA 1 (2004-2009)</th>
+                                <th class="p-3 w-1/5 text-indigo-300">UPA 2 (2009-2014)</th>
+                                <th class="p-3 w-1/5 text-orange-300">NDA Till Now (2014-2026)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 font-mono" id="regimes-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 5: PER CAPITA PARADOX ANALYSIS       -->
+        <!-- ========================================== -->
+        <section id="view-percapita" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6">
+                <div class="max-w-3xl mb-6">
+                    <span class="px-2.5 py-1 rounded-md bg-rose-500/10 text-rose-400 border border-rose-500/20 text-xs font-medium">
+                        Structural Analysis
+                    </span>
+                    <h2 class="text-2xl font-bold text-white mt-2">Did Per Capita GDP Grow in Accordance with the Growth Story?</h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        <strong class="text-rose-400">Short Verdict:</strong> Mathematically yes, but structurally no.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- MATHEMATICAL SYMMETRY CARD -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-3 text-emerald-400 font-semibold text-sm">
+                            <i data-lucide="check-circle-2" class="w-4 h-4"></i> 1. The Proportional Convergence (Mathematical Illusion)
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            On paper, Per Capita Income moves in near-perfect symmetry with total real GDP growth. During the 2006–2010 boom (GDP 8.0%), Per Capita growth peaked at 6.5%. During the 2016–2020 deceleration (GDP 5.5%), Per Capita growth dropped to 4.3%.
+                        </p>
+                        <div class="mt-4 p-3 bg-slate-900 rounded-lg text-[11px] text-slate-400 border border-slate-800/80">
+                            <strong>Demographic Factor:</strong> India's population growth slowed from 2.1% in 1991 to under 0.9% by 2026. This baseline compression mathematically inflates the average per capita output even when median wages stall.
+                        </div>
+                    </div>
+
+                    <!-- STRUCTURAL DIVERGENCE CARD -->
+                    <div class="bg-slate-950 border border-slate-800 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-3 text-rose-400 font-semibold text-sm">
+                            <i data-lucide="alert-triangle" class="w-4 h-4"></i> 2. The Structural Disconnection (Distributional Reality)
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Per Capita GDP is a simple arithmetic mean ($\text{Total GDP} \div \text{Population}$). It assumes uniform distribution. In reality, India Inc and stock market gains concentrated heavily among the top 10%, while real rural wages stayed flat.
+                        </p>
+                        <div class="mt-4 p-3 bg-slate-900 rounded-lg text-[11px] text-slate-400 border border-slate-800/80">
+                            <strong>Public Service Squeeze:</strong> Chronic underfunding of Education (~3% GDP) and Health (~1.4% GDP) forced the bottom 80% to pay private out-of-pocket costs, eroding gains in material living standards.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DIAGRAM VISUALIZATION OF K-SHAPED DIVERGENCE -->
+                <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 text-center">
+                    <h3 class="text-sm font-bold text-slate-300 mb-4 font-mono">THE K-SHAPED DIVERGENCE (1991–2026)</h3>
+                    <div class="max-w-2xl mx-auto space-y-4 font-mono text-xs">
+                        <div class="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-300 flex items-center justify-between">
+                            <span>Top 10% Wealth & SENSEX Accumulation</span>
+                            <span class="font-bold">▲ Exponential Expansion (+166% SENSEX recent)</span>
+                        </div>
+                        <div class="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg text-blue-300 flex items-center justify-between">
+                            <span>Official Aggregate Per Capita GDP Line</span>
+                            <span class="font-bold">➔ Arithmetic Mean (+5.8% avg)</span>
+                        </div>
+                        <div class="p-3 bg-rose-500/10 border border-rose-500/30 rounded-lg text-rose-300 flex items-center justify-between">
+                            <span>Bottom 50% Real Wages & Social Escalator</span>
+                            <span class="font-bold">▼ Stagnant Floor (Private Edu/Health Drain)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER & DATA SOURCE CAVEATS -->
+    <footer class="border-t border-slate-800 bg-slate-950 py-6 px-4 sm:px-6 lg:px-8 mt-12 text-slate-500">
+        <div class="max-w-7xl mx-auto space-y-3">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 border-b border-slate-900 pb-3">
+                <div class="flex items-center gap-2 text-xs font-semibold text-slate-400">
+                    <i data-lucide="database" class="w-4 h-4 text-blue-400"></i>
+                    <span>Primary Data Sourcing & Methodological Verification Caveats</span>
+                </div>
+                <div class="text-[11px] text-slate-600 font-mono">
+                    Updated through FY 2025–26 Archives
+                </div>
+            </div>
+
+            <!-- CAVEATS SMALL GREY TEXT -->
+            <div class="text-[11px] leading-relaxed space-y-1.5 font-mono text-slate-500">
+                <p>
+                    <strong>[1] Macroeconomic & Output Accounts:</strong> Ministry of Statistics and Programme Implementation (MoSPI) National Accounts Statistics (NAS) back-series (1993-94, 1999-00, 2004-05, 2011-12 series); Union Budget Economic Surveys (1991–2026).
+                </p>
+                <p>
+                    <strong>[2] Forex & Capital Accounts:</strong> Reserve Bank of India (RBI) Database on Indian Economy; Handbooks of Statistics on Indian Economy; RBI Annual Balance Sheets.
+                </p>
+                <p>
+                    <strong>[3] Fiscal & Direct Taxes:</strong> Controller General of Accounts (CGA), Dept. of Expenditure; Union Budget Expenditure/Receipt Budgets (Demands for Grants).
+                </p>
+                <p>
+                    <strong>[4] Capital Markets & Investments:</strong> BSE Historical Indices, SEBI Annual Handbooks, Ministry of Commerce & Industry DPIIT FDI Bulletins.
+                </p>
+                <p>
+                    <strong>[5] Social Allocations & Living Benchmarks:</strong> Department of Economic Affairs (DEA); NITI Aayog National Overviews; CSO Household Consumption Surveys (PFCE base index).
+                </p>
+            </div>
+            
+            <div class="text-[10px] text-slate-600 text-center pt-2">
+                India Growth & Regime Infographics • Built for Interactive Analytical Review
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+        // 12 PARAMETERS MASTER DATA STRUCTURE
+        const masterParameters = [
+            {
+                id: 'gdp',
+                name: 'Avg. Real GDP Growth',
+                unit: '% Annual Average',
+                type: 'percentage',
+                icon: 'activity',
+                actuals: [5.40, 6.00, 5.80, 8.00, 6.70, 5.50, 6.80],
+                growths: [5.40, 6.00, 5.80, 8.00, 6.70, 5.50, 6.80],
+                desc: 'Real GDP annual growth rate averaged over 5-year blocks.'
+            },
+            {
+                id: 'indiaInc',
+                name: 'Avg. India Inc. Growth',
+                unit: '% Private Sector GFCF',
+                type: 'percentage',
+                icon: 'building-2',
+                actuals: [5.52, 5.78, 6.09, 7.94, 6.76, 5.33, 6.99],
+                growths: [5.52, 5.78, 6.09, 7.94, 6.76, 5.33, 6.99],
+                desc: 'Private sector capital formation and corporate output core growth.'
+            },
+            {
+                id: 'perCapita',
+                name: 'Avg. Per Capita Growth',
+                unit: '% Real Per Capita Income',
+                type: 'percentage',
+                icon: 'user-check',
+                actuals: [3.40, 4.10, 4.20, 6.50, 5.30, 4.30, 5.80],
+                growths: [3.40, 4.10, 4.20, 6.50, 5.30, 4.30, 5.80],
+                desc: 'Average annual expansion in real per capita income.'
+            },
+            {
+                id: 'forex',
+                name: 'Forex Reserves',
+                unit: 'USD Billion',
+                type: 'absolute',
+                icon: 'globe',
+                actuals: [20.8, 38.0, 141.5, 279.0, 341.6, 477.8, 670.1],
+                growths: [1633.0, 82.6, 272.3, 97.1, 22.4, 39.8, 40.2],
+                desc: 'Foreign exchange stockpiles held by the RBI at end of period.'
+            },
+            {
+                id: 'debt',
+                name: 'Government Debt',
+                unit: '% Combined GDP',
+                type: 'percentage',
+                icon: 'scale',
+                actuals: [70.3, 73.1, 81.2, 66.5, 67.4, 74.1, 82.5],
+                growths: [3.2, 2.8, 8.1, -14.7, 0.9, 6.7, 8.4], // pp changes
+                desc: 'Combined Centre + States public debt burden as % of GDP.'
+            },
+            {
+                id: 'tax',
+                name: 'Direct Tax Collection',
+                unit: 'INR Crores',
+                type: 'absolute',
+                icon: 'receipt',
+                actuals: [15440, 31760, 132770, 378060, 695790, 1049700, 2210000],
+                growths: [123.4, 105.7, 318.0, 184.7, 84.0, 50.8, 110.5],
+                desc: 'Annual direct corporate and personal tax collection yields.'
+            },
+            {
+                id: 'fdi',
+                name: 'FDI Inflow',
+                unit: 'Annual USD Net ($B)',
+                type: 'absolute',
+                icon: 'arrow-down-right',
+                actuals: [2.1, 3.5, 6.0, 34.8, 45.1, 74.4, 85.5],
+                growths: [1400.0, 66.6, 71.4, 480.0, 29.5, 64.9, 14.9],
+                desc: 'Net annual foreign direct investment capital inflow.'
+            },
+            {
+                id: 'sensex',
+                name: 'NIFTY / SENSEX',
+                unit: 'SENSEX Close Points',
+                type: 'absolute',
+                icon: 'trending-up',
+                actuals: [3260, 5001, 6492, 17527, 27957, 29468, 78500],
+                growths: [210.4, 53.4, 29.8, 169.9, 59.5, 5.4, 166.3],
+                desc: 'Benchmark stock exchange index closing level.'
+            },
+            {
+                id: 'agri',
+                name: 'Agricultural Budget',
+                unit: 'INR Crores',
+                type: 'absolute',
+                icon: 'sprout',
+                actuals: [2320, 3410, 5170, 15670, 23980, 134300, 127460],
+                growths: [45.0, 46.9, 51.6, 203.0, 53.0, 460.0, -5.1],
+                desc: 'Union budget allocation to agriculture & farmer welfare.'
+            },
+            {
+                id: 'edu',
+                name: 'Educational Budget',
+                unit: 'INR Crores',
+                type: 'absolute',
+                icon: 'graduation-cap',
+                actuals: [1890, 3460, 10130, 43400, 68720, 94850, 125600],
+                growths: [35.0, 83.0, 192.7, 328.4, 58.3, 38.0, 32.4],
+                desc: 'Central Ministry allocations to education.'
+            },
+            {
+                id: 'health',
+                name: 'Healthcare Budget',
+                unit: 'INR Crores',
+                type: 'absolute',
+                icon: 'heart-pulse',
+                actuals: [670, 1130, 2640, 19530, 30640, 62650, 89280],
+                growths: [34.0, 68.6, 133.6, 639.7, 56.8, 104.4, 42.5],
+                desc: 'Central Ministry allocations to healthcare.'
+            },
+            {
+                id: 'sol',
+                name: 'Standard of Living',
+                unit: 'PFCE Index (1991=100)',
+                type: 'index',
+                icon: 'shopping-bag',
+                actuals: [121.4, 124.0, 161.0, 233.0, 301.0, 412.0, 585.0],
+                growths: [21.4, 24.0, 29.8, 44.7, 29.1, 36.8, 41.9],
+                desc: 'Private Final Consumption Expenditure real index.'
+            }
+        ];
+
+        // 5-YEAR PERIODS LABELS
+        const periods = ["1991–1995", "1996–2000", "2001–2005", "2006–2010", "2011–2015", "2016–2020", "2021–2026"];
+
+        // POLICY BLURBS DATASET FOR GRAPH 3
+        const policyBlurbs = [
+            {
+                period: "1991–1995",
+                paramId: "forex",
+                growth: "+1600%",
+                driver: "Aided by Govt",
+                blurb: "Active structural rupee devaluation and emergency stabilization."
+            },
+            {
+                period: "1991–1995",
+                paramId: "debt",
+                growth: "+3.2 pp",
+                driver: "Hindered by Govt",
+                blurb: "Legacy fiscal mismanagement forced strict IMF-mandated austerity."
+            },
+            {
+                period: "1991–1995",
+                paramId: "tax",
+                growth: "+123.4%",
+                driver: "Aided by Govt",
+                blurb: "Slashing tax rates (Chelliah reforms) boosted compliance."
+            },
+            {
+                period: "1991–1995",
+                paramId: "fdi",
+                growth: "+1400%",
+                driver: "Aided by Govt",
+                blurb: "Abolishing the Industrial License Raj unlocked foreign entry."
+            },
+            {
+                period: "1996–2000",
+                paramId: "debt",
+                growth: "+2.8 pp",
+                driver: "Hindered by Govt",
+                blurb: "5th Pay Commission Implementation blew a hole in public savings."
+            },
+            {
+                period: "1996–2000",
+                paramId: "fdi",
+                growth: "+66.6%",
+                driver: "Hindered by Extran",
+                blurb: "1998 Pokhran nuclear sanctions choked foreign capital lines."
+            },
+            {
+                period: "1996–2000",
+                paramId: "sensex",
+                growth: "+53.4%",
+                driver: "Hindered by Extran",
+                blurb: "Smashed by the 1997 Asian Crisis and 2000 Dot-Com crash."
+            },
+            {
+                period: "2001–2005",
+                paramId: "debt",
+                growth: "-14.7 pp shift",
+                driver: "Aided by Govt",
+                blurb: "Passing the landmark FRBM Act of 2003 enforced fiscal discipline."
+            },
+            {
+                period: "2001–2005",
+                paramId: "fdi",
+                growth: "+71.4%",
+                driver: "Aided by India Inc",
+                blurb: "Corporate de-leveraging made domestic firms highly attractive."
+            },
+            {
+                period: "2001–2005",
+                paramId: "edu",
+                growth: "+192.7%",
+                driver: "Aided by Govt",
+                blurb: "Sarva Shiksha Abhiyan backed by a dedicated education cess."
+            },
+            {
+                period: "2006–2010",
+                paramId: "forex",
+                growth: "+97.1%",
+                driver: "Aided by India Inc",
+                blurb: "Massive software exports & services revenue flooded central bank."
+            },
+            {
+                period: "2006–2010",
+                paramId: "agri",
+                growth: "+203.0%",
+                driver: "Hindered by Govt",
+                blurb: "₹60,000 Cr farm loan waiver of 2008 damaged rural credit discipline."
+            },
+            {
+                period: "2011–2015",
+                paramId: "fdi",
+                growth: "+29.5%",
+                driver: "Hindered by Govt",
+                blurb: "Bureaucratic delays and 'Policy Paralysis' stalled megaprojects."
+            },
+            {
+                period: "2011–2015",
+                paramId: "tax",
+                growth: "+84.0%",
+                driver: "Hindered by India Inc",
+                blurb: "Corporate balance sheets broke under massive NPAs and debt stalling."
+            },
+            {
+                period: "2016–2020",
+                paramId: "tax",
+                growth: "+50.8%",
+                driver: "Aided by Govt",
+                blurb: "Implementation of GST and faceless data analytics widened the tax base."
+            },
+            {
+                period: "2016–2020",
+                paramId: "agri",
+                growth: "+460.0%",
+                driver: "Aided by Govt",
+                blurb: "PM-KISAN launched, bypassing intermediaries via direct transfers."
+            },
+            {
+                period: "2021–2026",
+                paramId: "tax",
+                growth: "+110.5%",
+                driver: "Aided by Govt",
+                blurb: "AI-driven Annual Information Statements curtailed tax evasion."
+            },
+            {
+                period: "2021–2026",
+                paramId: "fdi",
+                growth: "+14.9%",
+                driver: "Aided by Govt",
+                blurb: "PLI scheme localized critical manufacturing lines."
+            },
+            {
+                period: "2021–2026",
+                paramId: "sensex",
+                growth: "+166.3%",
+                driver: "Aided by India Inc",
+                blurb: "High corporate earnings and domestic retail financialization boom."
+            }
+        ];
+
+        // STATE MANAGEMENT
+        let currentTab = 'actuals';
+        let currentParamId = 'forex';
+        let chartActualsInstance = null;
+        let chartGrowthInstance = null;
+
+        // INITIALIZATION
+        window.onload = function() {
+            renderParameterButtons();
+            switchTab('actuals');
+            lucide.createIcons();
+        };
+
+        // PARAMETER BUTTONS RENDERER
+        function renderParameterButtons() {
+            const container = document.getElementById('parameter-buttons-container');
+            container.innerHTML = '';
+
+            masterParameters.forEach(param => {
+                const btn = document.createElement('button');
+                btn.id = `btn-param-${param.id}`;
+                btn.onclick = () => selectParameter(param.id);
+                btn.className = `px-2.5 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1.5 ${
+                    param.id === currentParamId 
+                    ? 'bg-blue-600 text-white font-semibold shadow-lg shadow-blue-500/20' 
+                    : 'bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800'
+                }`;
+                btn.innerHTML = `<i data-lucide="${param.icon}" class="w-3 h-3"></i> ${param.name}`;
+                container.appendChild(btn);
+            });
+            lucide.createIcons();
+        }
+
+        // SELECT PARAMETER
+        function selectParameter(paramId) {
+            currentParamId = paramId;
+            renderParameterButtons();
+            
+            if (currentTab === 'actuals') renderActualsChart();
+            if (currentTab === 'growth') renderGrowthChart();
+            if (currentTab === 'blurbs') renderPolicyCards();
+        }
+
+        // SWITCH TAB VIEW
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Hide all views
+            ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(t => {
+                document.getElementById(`view-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('active');
+            });
+
+            // Show selected view
+            document.getElementById(`view-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+
+            // Show/Hide parameter bar depending on tab relevance
+            const paramBar = document.getElementById('parameter-bar');
+            if (tab === 'regimes' || tab === 'percapita') {
+                paramBar.classList.add('hidden');
+            } else {
+                paramBar.classList.remove('hidden');
+            }
+
+            // Render specific view logic
+            if (tab === 'actuals') renderActualsChart();
+            if (tab === 'growth') renderGrowthChart();
+            if (tab === 'blurbs') renderPolicyCards();
+            if (tab === 'regimes') renderRegimesTable();
+            
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // RENDER GRAPH 1: ACTUAL FIGURES
+        // ==========================================
+        function renderActualsChart() {
+            const param = masterParameters.find(p => p.id === currentParamId);
+            document.getElementById('actuals-title').innerText = `${param.name} (${param.unit})`;
+            document.getElementById('actuals-desc').innerText = param.desc;
+
+            const ctx = document.getElementById('chartActuals').getContext('2d');
+            if (chartActualsInstance) chartActualsInstance.destroy();
+
+            chartActualsInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: periods,
+                    datasets: [{
+                        label: `${param.name} (${param.unit})`,
+                        data: param.actuals,
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)',
+                            'rgba(99, 102, 241, 0.7)',
+                            'rgba(245, 158, 11, 0.8)', // NDA 1 era
+                            'rgba(37, 99, 235, 0.8)',  // UPA 1 era
+                            'rgba(79, 70, 229, 0.8)',  // UPA 2 era
+                            'rgba(249, 115, 22, 0.8)', // NDA 2
+                            'rgba(234, 88, 12, 0.9)'   // NDA 3
+                        ],
+                        borderColor: '#1e293b',
+                        borderWidth: 2,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${param.name}: ${context.raw.toLocaleString()} ${param.unit}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                        },
+                        y: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 11 } }
+                        }
+                    }
+                }
+            });
+
+            // Populate cards below chart
+            const cardsGrid = document.getElementById('actuals-cards-grid');
+            cardsGrid.innerHTML = '';
+            periods.forEach((p, idx) => {
+                const card = document.createElement('div');
+                card.className = 'bg-slate-950 border border-slate-800 rounded-xl p-3 text-center';
+                card.innerHTML = `
+                    <div class="text-[10px] font-mono text-slate-400 mb-1">${p}</div>
+                    <div class="text-base font-bold font-mono text-white">${param.actuals[idx].toLocaleString()}</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5">${param.unit}</div>
+                `;
+                cardsGrid.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // RENDER GRAPH 2: GROWTH PERCENTAGES
+        // ==========================================
+        function renderGrowthChart() {
+            const param = masterParameters.find(p => p.id === currentParamId);
+            document.getElementById('growth-title').innerText = `${param.name} - Period Growth Rates (%)`;
+            document.getElementById('growth-desc').innerText = `Compounded percentage growth or percentage-point shift during each 5-year block.`;
+
+            const ctx = document.getElementById('chartGrowth').getContext('2d');
+            if (chartGrowthInstance) chartGrowthInstance.destroy();
+
+            chartGrowthInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: periods,
+                    datasets: [
+                        {
+                            label: `${param.name} Growth Rate (%)`,
+                            data: param.growths,
+                            borderColor: '#10b981',
+                            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                            fill: true,
+                            tension: 0.3,
+                            pointRadius: 6,
+                            pointBackgroundColor: '#10b981',
+                            pointHoverRadius: 8
+                        },
+                        {
+                            label: 'Avg Real GDP Growth (%)',
+                            data: masterParameters.find(p => p.id === 'gdp').actuals,
+                            borderColor: '#3b82f6',
+                            borderDash: [5, 5],
+                            pointStyle: 'circle',
+                            pointRadius: 4,
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { labels: { color: '#cbd5e1', font: { family: 'Inter', size: 11 } } }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { color: '#94a3b8' }
+                        },
+                        y: {
+                            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+                            ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono' } }
+                        }
+                    }
+                }
+            });
+
+            // Populate table matrix below chart
+            const matrixBody = document.getElementById('growth-matrix-body');
+            matrixBody.innerHTML = '';
+            
+            const gdpParam = masterParameters.find(p => p.id === 'gdp');
+            const incParam = masterParameters.find(p => p.id === 'indiaInc');
+
+            const regimeNames = [
+                "Rao Reforms",
+                "UF / Asian Crisis",
+                "NDA 1 (Vajpayee)",
+                "UPA 1 (Manmohan)",
+                "UPA 2 (Manmohan)",
+                "NDA 2 (Modi 1)",
+                "NDA 2/3 (Modi 2/3)"
+            ];
+
+            periods.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-800/40 transition';
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${p}</td>
+                    <td class="p-3 text-slate-400">${regimeNames[idx]}</td>
+                    <td class="p-3 text-right text-blue-400">${gdpParam.actuals[idx]}%</td>
+                    <td class="p-3 text-right text-emerald-400">${incParam.actuals[idx]}%</td>
+                    <td class="p-3 text-right text-slate-200">${param.actuals[idx].toLocaleString()} ${param.unit}</td>
+                    <td class="p-3 text-right font-bold text-emerald-300">${param.growths[idx]}%</td>
+                `;
+                matrixBody.appendChild(tr);
+            });
+        }
+
+        // ==========================================
+        // RENDER GRAPH 3: POLICY BLURBS CARDS
+        // ==========================================
+        function renderPolicyCards() {
+            const grid = document.getElementById('blurbs-cards-grid');
+            grid.innerHTML = '';
+
+            const selectedDriver = document.getElementById('driver-filter').value;
+
+            policyBlurbs.forEach(item => {
+                if (selectedDriver !== 'ALL' && item.driver !== selectedDriver) return;
+
+                const param = masterParameters.find(p => p.id === item.paramId);
+
+                let badgeClass = 'badge-aided-govt';
+                if (item.driver === 'Hindered by Govt') badgeClass = 'badge-hindered-govt';
+                if (item.driver === 'Aided by India Inc') badgeClass = 'badge-aided-inc';
+                if (item.driver === 'Hindered by India Inc') badgeClass = 'badge-hindered-inc';
+                if (item.driver === 'Hindered by Extran') badgeClass = 'badge-hindered-ext';
+
+                const card = document.createElement('div');
+                card.className = 'bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700 transition space-y-3';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="text-xs font-mono text-slate-400">${item.period}</span>
+                            <span class="text-[10px] px-2 py-0.5 rounded font-semibold ${badgeClass}">
+                                ${item.driver}
+                            </span>
+                        </div>
+                        <h4 class="text-sm font-bold text-white flex items-center gap-1.5">
+                            <i data-lucide="${param.icon}" class="w-4 h-4 text-blue-400"></i>
+                            ${param.name}
+                        </h4>
+                        <div class="mt-2 text-xs text-slate-300 leading-relaxed bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                            "${item.blurb}"
+                        </div>
+                    </div>
+                    <div class="pt-2 border-t border-slate-900 flex items-center justify-between text-xs font-mono">
+                        <span class="text-slate-500">Period Growth:</span>
+                        <span class="font-bold text-emerald-400">${item.growth}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // RENDER REGIMES COMPARISON TABLE
+        // ==========================================
+        function renderRegimesTable() {
+            const tbody = document.getElementById('regimes-table-body');
+            tbody.innerHTML = '';
+
+            const comparisonData = [
+                {
+                    metric: "Average Real GDP Growth",
+                    nda1: "6.0%",
+                    upa1: "8.4%",
+                    upa2: "6.6% (10yr avg 7.8%)",
+                    ndaTillNow: "6.5% – 6.8% (Est.)"
+                },
+                {
+                    metric: "Forex Reserves (USD)",
+                    nda1: "$113 Billion (May 2004)",
+                    upa1: "~$250 Billion",
+                    upa2: "$313 Billion (May 2014)",
+                    ndaTillNow: "$696.99 Billion (May 2026)"
+                },
+                {
+                    metric: "Absolute Forex Expansion",
+                    nda1: "Baseline Surge",
+                    upa1: "+121%",
+                    upa2: "+177% (Overall UPA)",
+                    ndaTillNow: "+122.7% (Overall NDA)"
+                },
+                {
+                    metric: "Direct Tax Collection",
+                    nda1: "₹1.05 Lakh Cr (2004)",
+                    upa1: "₹3.35 Lakh Cr (2009)",
+                    upa2: "₹6.38 Lakh Cr (2014)",
+                    ndaTillNow: "₹22.26 Lakh Cr (2025)"
+                },
+                {
+                    metric: "Taxpayer Base (Filers)",
+                    nda1: "~2.0 Crore",
+                    upa1: "~3.0 Crore",
+                    upa2: "3.8 Crore",
+                    ndaTillNow: "7.5 Crore (+97.3%)"
+                },
+                {
+                    metric: "Cumulative FDI Inflows",
+                    nda1: "~$25 Billion",
+                    upa1: "~$130 Billion",
+                    upa2: "$308.38 Billion (Total UPA)",
+                    ndaTillNow: "$748.78 Billion (2014-25)"
+                },
+                {
+                    metric: "Agri Dept Budget",
+                    nda1: "< ₹10,000 Crore",
+                    upa1: "₹15,670 Crore",
+                    upa2: "₹21,933 Crore",
+                    ndaTillNow: "₹1,32,561 Crore (+504%)"
+                },
+                {
+                    metric: "Avg Retail Inflation (CPI)",
+                    nda1: "4.8%",
+                    upa1: "6.0%",
+                    upa2: "10.4% (Peaked)",
+                    ndaTillNow: "5.1% (Managed)"
+                },
+                {
+                    metric: "National Highway Additions",
+                    nda1: "3,750 Miles (Golden Quad)",
+                    upa1: "~6,500 Km",
+                    upa2: "~13,547 Km (Total UPA)",
+                    ndaTillNow: "~67,029 Km (Bharatmala)"
+                }
+            ];
+
+            comparisonData.forEach(row => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-900/60 transition';
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white flex items-center gap-1.5">
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-blue-400"></i> ${row.metric}
+                    </td>
+                    <td class="p-3 text-amber-200">${row.nda1}</td>
+                    <td class="p-3 text-blue-200">${row.upa1}</td>
+                    <td class="p-3 text-indigo-200">${row.upa2}</td>
+                    <td class="p-3 text-orange-200 font-bold">${row.ndaTillNow}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
