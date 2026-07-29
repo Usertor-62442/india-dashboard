@@ -24,8 +24,8 @@
             </p>
         </header>
 
-        <!-- Parameter Selector -->
-        <div>
+        <!-- Parameter Selector (Hides on global tabs) -->
+        <div id="parameter-section">
             <h2 class="text-xs uppercase tracking-wider text-slate-500 font-semibold mb-2">Select Macro Indicator</h2>
             <div id="parameter-buttons-container" class="flex flex-wrap gap-2">
                 <!-- Dynamic parameter buttons injected here -->
@@ -33,7 +33,7 @@
         </div>
 
         <!-- Navigation Tabs -->
-        <div class="border-b border-slate-800 flex flex-wrap gap-2">
+        <div class="border-b border-slate-800 flex flex-wrap gap-2 mt-4">
             <button id="tab-actuals" onclick="switchTab('actuals')" class="active bg-blue-600 text-white px-4 py-2 rounded-t-lg font-medium text-sm transition">
                 Actual Levels
             </button>
@@ -175,11 +175,11 @@
             currentParamId = id;
             renderParameterButtons();
             updateCharts();
-            renderBlurbs();
         }
 
         // Tab Switching Logic
         function switchTab(tabId) {
+            // Manage Tab Visibility
             ['actuals', 'growth', 'blurbs', 'regimes', 'percapita'].forEach(id => {
                 const viewEl = document.getElementById(`view-${id}`);
                 const tabEl = document.getElementById(`tab-${id}`);
@@ -195,6 +195,16 @@
                 }
             });
 
+            // Toggle Parameter Selector Visibility 
+            // (Only show on Actuals and Growth tabs)
+            const paramSection = document.getElementById('parameter-section');
+            if (tabId === 'actuals' || tabId === 'growth') {
+                paramSection.classList.remove('hidden');
+            } else {
+                paramSection.classList.add('hidden');
+            }
+
+            // Render Per Capita Chart if needed
             if (tabId === 'percapita' && !chartPerCapitaInstance) {
                 renderPerCapitaChart();
             }
@@ -267,15 +277,13 @@
             });
         }
 
-        // Render Policy Blurbs
+        // Render Policy Blurbs (Now independent of the parameter selector)
         function renderBlurbs() {
             const container = document.getElementById('blurbs-container');
             container.innerHTML = '';
 
-            const filtered = policyBlurbs.filter(b => b.paramId === currentParamId);
-            const itemsToDisplay = filtered.length > 0 ? filtered : policyBlurbs;
-
-            itemsToDisplay.forEach(item => {
+            // Render all 6 items consistently
+            policyBlurbs.forEach(item => {
                 const param = masterParameters.find(p => p.id === item.paramId);
                 const card = document.createElement('div');
                 card.className = 'bg-slate-900/60 p-4 rounded-lg border border-slate-700/60 flex flex-col justify-between';
@@ -342,7 +350,7 @@
         window.onload = () => {
             renderParameterButtons();
             updateCharts();
-            renderBlurbs();
+            renderBlurbs(); // Call once on load, no longer triggered by selectParameter()
         };
     </script>
 </body>
